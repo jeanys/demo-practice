@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>图片轮播</title>
+<style>
+body,p,button{margin:0 auto;font:normal 12px "Microsoft Yahei";color:#333}
+button:focus{outline:0}
+#scroll{position:relative;margin:50px auto 20px;width:800px;height:600px}
+#scroll img{width:800px;height:600px;background:url("images/loading.gif") no-repeat center}
+#prev,#next{position:absolute;top:50%;margin-top:-40px;width:80px;height:80px;background:#FFF;border-radius:3px;color:#555;font-size:80px;line-height:65px;text-decoration:none;text-align:center;opacity:0.5}
+#prev:hover,#next:hover{opacity:0.8;color:#f30}
+#prev{left:10px}
+#next{right:10px}
+#imginfo,#imgnum{position:absolute;left:0;width:100%;line-height:30px;background:rgba(0,0,0,0.5);color:#FFF;text-align:center}
+#imginfo{bottom:0}
+#imgnum{top:0}
+#scrolltype{margin:0 auto;width:800px;text-align:center}
+#scrolltype button{background:#FFF;border:1px solid #CCC;border-radius:3px;padding:10px 20px;font-size:14px;cursor:pointer}
+#scrolltype button.curr{background:#333;color:#FFF;border-color:#222}
+</style>
+<script>
+window.onload = function() {
+    var oPrev = document.getElementById('prev');
+    var oNext = document.getElementById('next');
+    var oImginfo = document.getElementById('imginfo');
+    var oImgnum = document.getElementById('imgnum');
+    var oImg = document.getElementById('sclimg');
+    var oMode1 = document.getElementById('mode1');
+    var oMode2 = document.getElementById('mode2');
+
+    // 初始化
+    var num = 0;
+    var arrImg = ['images/01.jpg','images/02.jpg','images/03.jpg','images/04.jpg','images/05.jpg'];
+    var arrText = ['爱情玫瑰','含苞的郁金香','绽放的郁金香','樱花簇簇','缅栀子'];
+    var mode = 1;
+    scroll();
+
+    // 切换图片
+    function scroll() {
+        oImg.src = arrImg[num];
+        oImginfo.innerHTML = arrText[num];
+        oImgnum.innerHTML = num+1 +' / '+ arrImg.length;
+    };
+    oPrev.onclick = function() {
+        num --;
+        if(num == -1) {
+            if(mode == 1){
+                num = arrImg.length-1;
+            } else if(mode == 2) {
+                num = 0;
+                alert('已经到达第一张了，不要再翻了~');
+            };
+        };
+        scroll();
+    };
+    oNext.onclick = function() {
+        num ++;
+        if(num == arrImg.length) {
+            if(mode == 1) {
+                num = 0;
+            } else if (mode == 2) {
+                num = arrImg.length-1;
+                alert('已经到达最后一张，不要再翻了~');
+            };
+        };
+        scroll();
+    };
+
+    // 更改模式
+    oMode1.onclick = function() {
+        mode = 1;
+        oMode2.className = "";
+        oMode1.className = "curr";
+    };
+    oMode2.onclick = function() {
+        mode = 2;
+        oMode1.className = "";
+        oMode2.className = "curr";
+    };
+};
+</script>
+</head>
+
+<body>
+<div id="scroll">
+    <a id="prev" href="javascript:;">&laquo;</a>
+    <a id="next" href="javascript:;">&raquo;</a>
+    <p id="imginfo">图片说明加载中……</p>
+    <span id="imgnum">图片数量计算中……</span>
+    <img id="sclimg" src="" />
+</div>
+<div id="scrolltype">
+    <button id="mode1" class="curr">循环播放</button>
+    <button id="mode2">顺序播放</button>
+</div>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>控制多组图片切换</title>
+<style>
+body,ul{margin: 0; padding: 0}
+ul{list-style: none}
+a{text-decoration: none; color: #fff}
+body{font: normal 14px Arial,"Microsoft Yahei"}
+.mulitimg{width: 720px; margin: 50px auto}
+.mulitimg ul{float: left; padding: 20px 20px 0; margin: 0 10px; box-shadow: 0 0 3px rgba(0,0,0,0.3)}
+.mulitimg li{display: none;text-align: center; line-height: 50px}
+.mulitimg li.active{display: block}
+.mulitimg li img{width: 300px; display: block; cursor: pointer}
+.btn{clear: both; text-align: center; padding: 30px 0}
+.btn a{display: inline-block; padding: 3px 10px; margin: 0 5px; border-radius: 3px; background: #949DA0; font-size: 12px; line-height: 1.5}
+.btn a:hover{background: #333}
+</style>
+</head>
+
+<body>
+<div class="mulitimg" id="group">
+    <ul></ul>
+    <ul></ul>
+    <div class="btn">
+        <a href="javascript:;" id="prev">上一组</a>
+        <a href="javascript:;" id="next">下一组</a>
+    </div>
+</div>
+
+<script>
+    var div = document.getElementById('group');
+    var ul = div.getElementsByTagName('ul');
+    var prev = document.getElementById('prev');
+    var next = document.getElementById('next');
+    var list = [['images/photo1.jpg','images/photo2.jpg','images/photo3.jpg'],['images/photo4.jpg','images/photo5.jpg']];
+    var img = [], li = [], num = [0,0];
+    for (var i = 0; i < list.length; i++) {
+        for (var j = 0; j < list[i].length; j++) {
+            ul[i].innerHTML += '<li><img>第'+(i+1)+'组第'+(j+1)+'张</li>';
+            li[i] = ul[i].getElementsByTagName('li');
+            img[i] = ul[i].getElementsByTagName('img');
+            img[i][j].src = list[i][j];
+        };
+        ul[i].getElementsByTagName('li')[0].className = 'active';
+    };
+    for (var i = 0; i < img.length; i++) {
+        for (var j = 0; j < img[i].length; j++) {
+            img[i][j].group = i;
+            img[i][j].index = j;
+            img[i][j].onclick = function() {
+                change(this.group);
+            };
+        };
+    };
+    prev.onclick = function() {
+        for (var i = 0; i < img.length; i++) {
+            change(i,1);
+        };
+    };
+    next.onclick = function() {
+        for (var i = 0; i < img.length; i++) {
+            change(i);
+        };
+    };
+    function change(i,mode) {
+        li[i][num[i]].className = '';
+        if (mode==0) {
+            num[i]++;
+            if (num[i] > img[i].length-1) num[i] = 0;
+        } else {
+            num[i]--;
+            if (num[i] < 0) num[i] = img[i].length-1;
+        };
+        li[i][num[i]].className = 'active';
+    };
+</script>
+</body>
+</html>

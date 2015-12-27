@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>1.JS热身运动练习</title>
+<style>
+body{font:normal 12px "Microsoft Yahei"}
+a{text-decoration:none}
+#setClass{background:#F30;color:#FFF;padding:8px 20px}
+#styleDiv{border:3px solid #000;width:100px;height:100px;margin-top:30px}
+#mask{position:absolute;width:100%;height:100%;top:0;left:0;background:rgba(0,0,0,0.5);display:none}
+#popup{position:absolute;top:50%;left:50%;margin-top:-70px;margin-left:-115px;width:230px;height:140px;background:#FFF;outline:15px solid rgba(255,255,255,0.3);padding:20px;line-height:2}
+.btn_red{background:#F20;padding:5px 15px;color:#FFF}
+.btn_yello{background:#FA0;padding:5px 15px;color:#FFF}
+.btn_blue{background:#08F;padding:5px 15px;color:#FFF}
+.btn_gray{background:#f1f1f1;padding:3px 8px;color:#666;border:1px solid #CCC}
+.btn_submit{background:#002E91;padding:3px 12px;color:#FFF}
+</style>
+<script>
+window.onload = function() {
+    var oSetbtn = document.getElementById('setClass');
+    var oDiv = document.getElementById('styleDiv');
+    var oMask = document.getElementById('mask');
+
+    var oRedbtn = document.getElementById('changeRed');
+    var oYellowbtn = document.getElementById('changeYello');
+    var oBluebtn = document.getElementById('changeBlue');
+
+    var oWid1 = document.getElementById('cWid1');
+    var oWid2 = document.getElementById('cWid2');
+    var oWid3 = document.getElementById('cWid3');
+    var oHei1 = document.getElementById('cHei1');
+    var oHei2 = document.getElementById('cHei2');
+    var oHei3 = document.getElementById('cHei3');
+
+    var oReset = document.getElementById('reset');
+    var oSubmit = document.getElementById('ok');
+
+    oSetbtn.onclick = function() {
+        oMask.style.display = 'block';
+    }
+    oRedbtn.onclick = function() {
+        oDiv.style.backgroundColor = '#F20';
+    }
+    oYellowbtn.onclick = function() {
+        oDiv.style.backgroundColor = '#FA0';
+    }
+    oBluebtn.onclick = function() {
+        oDiv.style.backgroundColor = '#08F';
+    }
+    oWid1.onclick = function() {
+        oDiv.style.width = '200px';
+    }
+    oWid2.onclick = function() {
+        oDiv.style.width = '300px';
+    }
+    oWid3.onclick = function() {
+        oDiv.style.width = '500px';
+    }
+    oHei1.onclick = function() {
+        oDiv.style.height = '200px';
+    }
+    oHei2.onclick = function() {
+        oDiv.style.height = '300px';
+    }
+    oHei3.onclick = function() {
+        oDiv.style.height = '500px';
+    }
+    oReset.onclick = function() {
+        oDiv.style.background = '';
+        oDiv.style.width = '';
+        oDiv.style.height = '';
+        oMask.style.display = 'none';
+    }
+    oSubmit.onclick = function() {
+        oMask.style.display = 'none';
+    }
+}
+</script>
+</head>
+
+<body>
+<h1>请为下面的DIV设置样式：</h1>
+<a id="setClass" href="javascript:;">点击设置</a>
+<div id="styleDiv"></div>
+
+<div id="mask">
+    <div id="popup">
+        <p>请选择背景色：
+            <a href="javascript:;" class="btn_red" id="changeRed">红</a>
+            <a href="javascript:;" class="btn_yello" id="changeYello">黄</a>
+            <a href="javascript:;" class="btn_blue" id="changeBlue">蓝</a>
+        </p>
+        <p>请选择宽（px）：
+            <a href="javascript:;" class="btn_gray" id="cWid1">200</a>
+            <a href="javascript:;" class="btn_gray" id="cWid2">300</a>
+            <a href="javascript:;" class="btn_gray" id="cWid3">500</a>
+        </p>
+        <p>请选择高（px）：
+            <a href="javascript:;" class="btn_gray" id="cHei1">200</a>
+            <a href="javascript:;" class="btn_gray" id="cHei2">300</a>
+            <a href="javascript:;" class="btn_gray" id="cHei3">500</a>
+        </p>
+        <p style="text-align:center">
+            <a href="javascript:;" class="btn_submit" id="reset">恢复</a>
+            <a href="javascript:;" class="btn_submit" id="ok">确认</a>
+        </p>
+    </div>
+</div>
+</body>
+</html>

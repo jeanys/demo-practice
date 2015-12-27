@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>带缩略图的图片切换效果</title>
+<style>
+/*reset*/
+body{background:url("images/bckg.jpg") no-repeat;background-size:cover;margin:0}
+ul,li{margin:0;padding:0;list-style:none}
+a img{border:0}
+a{outline:0}
+/*view*/
+.view{position:relative;width:900px;margin:100px auto;padding:5px;border-radius:5px;background:rgba(0,0,0,0.7)}
+.view .pic{position:relative;width:900px;height:500px;}
+.view .pic img{position:absolute;top:0;border-radius:3px}
+/*tipbox*/
+.view .tip{position:absolute;left:50%;bottom:70px;height:110px;width:224px;margin-left:-112px;z-index:99999}
+.view .tip li{display:none;position:absolute;float:left;background:url("images/tooltip.png") no-repeat;padding:10px}
+.view .tip li.curr{display:block}
+.view .tip a{display:block;width:124px;height:90px;overflow:hidden}
+.view .tip img{height:84px}
+/*btnbox*/
+.view .dot{position:absolute;left:50%;margin-left:-115px;bottom:25px;opacity:0.7;z-index:99999}
+.view .dot:hover{opacity:1.0}
+.view .dot .prev,.view .dot .next{float:left;width:50px;height:44px;background:url("images/slider-controls.png") no-repeat}
+.view .dot .prev{background-position:left}
+.view .dot .next{background-position:right}
+.view .dot .item{float:left;height:44px;padding:0 15px;text-indent:-999em;background:url("images/nav-bg.png") repeat-x}
+.view .dot .item li{float:left;}
+.view .dot .item a{float:left;width:11px;height:12px;margin:16px 4.5px;background:url("images/bullets.png") no-repeat top}
+.view .dot .item a.curr{background-position:bottom}
+</style>
+<script>
+window.onload = function() {
+    var oPic = document.getElementById('pic');
+    var oTip = document.getElementById('tip');
+    var oItem = document.getElementById('item');
+    var oPrev = document.getElementById('prev');
+    var oNext = document.getElementById('next');
+    var aPicture = oPic.getElementsByTagName('img');
+    var aThumb = oTip.getElementsByTagName('li');
+    var aBtn = oItem.getElementsByTagName('a');
+    var zindex = 0;
+    var picnum = 0; // current image index
+    for (var i = 0; i < aBtn.length; i++) {
+        aBtn[i].index = i;
+        aBtn[i].onclick = function() {
+            picnum = this.index;
+            switchpic();
+        };
+        // show thumbnail
+        aBtn[i].onmouseover = function() {
+            for (var j = 0; j < aBtn.length; j++) {
+                aThumb[j].className = '';
+            };
+            aThumb[this.index].className = 'curr';
+        }
+        // hide thumbnail
+        aBtn[i].onmouseout = function() {
+            setTimeout(function(){
+                for (var j = 0; j < aThumb.length; j++) {
+                    aThumb[j].className = '';
+                };
+            },500);
+        };
+    };
+    // prev image
+    oPrev.onclick = function() {
+        picnum = picnum-1 < 0 ? aPicture.length-1 : picnum-1;
+        switchpic();
+    };
+    // next image
+    oNext.onclick = function() {
+        picnum = picnum+1 > aPicture.length-1 ? 0 : picnum+1;
+        switchpic();
+    };
+    // switch image
+    function switchpic() {
+        for (var i = 0; i < aBtn.length; i++) {
+            aBtn[i].className = '';
+        };
+        aBtn[picnum].className = 'curr';
+        zindex += 1;
+        aPicture[picnum].style.zIndex = zindex;
+    };
+}
+</script>
+</head>
+
+<body>
+<div id="view" class="view">
+    <div id="pic" class="pic">
+        <ul>
+            <li><a href="#"><img src="images/photo1.jpg" alt="图片1"></a></li>
+            <li><a href="#"><img src="images/photo2.jpg" alt="图片2"></a></li>
+            <li><a href="#"><img src="images/photo3.jpg" alt="图片3"></a></li>
+            <li><a href="#"><img src="images/photo4.jpg" alt="图片4"></a></li>
+            <li><a href="#"><img src="images/photo5.jpg" alt="图片5"></a></li>
+        </ul>
+    </div>
+    <div id="tip" class="tip">
+        <ul>
+            <li><a href="#"><img src="images/photo1.jpg" alt="小图1"></a></li>
+            <li style="left:20px"><a href="#"><img src="images/photo2.jpg" alt="小图2"></a></li>
+            <li style="left:40px"><a href="#"><img src="images/photo3.jpg" alt="小图3"></a></li>
+            <li style="left:60px"><a href="#"><img src="images/photo4.jpg" alt="小图4"></a></li>
+            <li style="left:80px"><a href="#"><img src="images/photo5.jpg" alt="小图5"></a></li>
+        </ul>
+    </div>
+    <div id="dot" class="dot">
+        <a href="javascript:;" class="prev" id="prev"></a>
+        <ul class="item" id="item">
+            <li><a href="javascript:;" class="curr">1</a></li>
+            <li><a href="javascript:;">2</a></li>
+            <li><a href="javascript:;">3</a></li>
+            <li><a href="javascript:;">4</a></li>
+            <li><a href="javascript:;">5</a></li>
+        </ul>
+        <a href="javascript:;" class="next" id="next"></a>
+    </div>
+</div>
+</body>
+</html>

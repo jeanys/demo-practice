@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>图片带文字说明自动切换</title>
+    <style>
+        body,ul,h3,p{margin: 0; padding: 0}
+        ul{list-style: none}
+        .banner{width: 500px; padding: 5px; margin: 100px auto; box-shadow: 0 0 3px rgba(0,0,0,0.3); box-sizing: content-box}
+        .banner .wrap{width: 500px; height: 300px; overflow: hidden; position: relative}
+        .banner ul{width: 9999px; position: absolute; left: 0}
+        .clearfix:after,.clearfix:before{content: ""; display: block; height: 0; font-size: 0; clear: both; visibility: hidden}
+        .banner li{float: left; position: relative}
+        .banner li img{display: block; width: 500px; height: 300px}
+        .banner li div{position: absolute; bottom: -60px; left: 0; right: 0; height: 50px; padding: 5px 10px; background: rgba(0,0,0,0.7); color: #fff; line-height: 1.5}
+        .banner li:first-child div{bottom: 0}
+        .banner li p{font-size: 12px; color: #999}
+    </style>
+</head>
+
+<body>
+<div class="banner" id="banner">
+    <div class="wrap">
+        <ul class="clearfix">
+            <li>
+                <img src="images/pro1.jpg" alt=""/>
+                <div>
+                    <h3>决战双11PK赛</h3>
+                    <p>数码家电血价厮杀 活动时间11.1~11.11</p>
+                </div>
+            </li>
+            <li>
+                <img src="images/pro2.jpg" alt=""/>
+                <div>
+                    <h3>学院风双排扣大衣</h3>
+                    <p>优雅柔美 简约大气 品牌特卖 全场包邮</p>
+                </div>
+            </li>
+            <li>
+                <img src="images/pro3.jpg" alt=""/>
+                <div>
+                    <h3>特卖惠专场</h3>
+                    <p>风尚箱包 全场包邮 秋冬上新实惠购</p>
+                </div>
+            </li>
+            <li>
+                <img src="images/pro4.jpg" alt=""/>
+                <div>
+                    <h3>限时限量疯抢</h3>
+                    <p>4款爆品 惊爆超低价 每天4款 限时开抢</p>
+                </div>
+            </li>
+            <li>
+                <img src="images/pro5.jpg" alt=""/>
+                <div>
+                    <h3>美妆专场</h3>
+                    <p>11.12-11.14 国货也疯狂 全场包邮</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    var ban = document.getElementById('banner');
+    var list = ban.getElementsByTagName('ul')[0];
+    var item = ban.getElementsByTagName('li');
+    var text = list.getElementsByTagName('div');
+    var listWidth = 0;
+    var moveWidth = 0;
+    var itemWidth = 0;
+    var num = 1;
+    var timer = null;
+    var stime = 2000;
+
+    window.onload = function() {
+        list.appendChild(item[0].cloneNode(true));
+        itemWidth = parseInt(getStyle(item[0],'width'));
+        listWidth = itemWidth * item.length;
+        moveWidth = listWidth - itemWidth;
+        list.style.width = listWidth + 'px';
+        setTimeout(function(){
+            doMove(text[0],'bottom',10,5,-60,function(){banMove()});
+        },stime);
+    };
+
+    function banMove() {
+        doMove(list,'left',20,10,-itemWidth*num,function(){
+            doMove(text[num],'bottom',10,5,0,function(){
+                setTimeout(function(){
+                    doMove(text[num],'bottom',10,5,-60,function() {
+                        if (num >= item.length-1) {
+                            list.style.left = 0;
+                            num = 0;
+                        };
+                        num ++;
+                        banMove();
+                    });
+                },stime);
+            });
+        });
+    };
+
+    function doMove(obj,direc,speed,dist,endSpot,endFn) {
+        endSpot = parseInt(endSpot);
+        var startSpot = parseInt(getStyle(obj,direc));
+        if (startSpot === endSpot) return;
+        var timer = setInterval(function(){
+            var nowSpot = parseInt(getStyle(obj,direc));
+            var nextSpot = nowSpot < endSpot ? nowSpot+dist : nowSpot-dist;
+            if ((startSpot < endSpot && nextSpot >= endSpot) || (startSpot > endSpot && nextSpot <= endSpot)) {
+                obj.style[direc] = endSpot +'px';
+                clearInterval(timer);
+                endFn && endFn();
+                return;
+            }
+            obj.style[direc] = nextSpot +'px';
+        },speed)
+    };
+    function getStyle(obj,attr) {
+        return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj)[attr];
+    };
+</script>
+</body>
+</html>

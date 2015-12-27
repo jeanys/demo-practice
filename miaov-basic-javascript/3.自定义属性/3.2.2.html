@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>带缩略图的图片切换效果</title>
+<style>
+/*reset*/
+body{background:url("images/bckg.jpg") no-repeat;background-size:cover;margin:0}
+ul,li{margin:0;padding:0;list-style:none}
+a img{border:0}
+a{outline:0}
+/*view*/
+.view{position:relative;width:900px;margin:100px auto;padding:5px;border-radius:5px;background:rgba(0,0,0,0.7)}
+.view .pic{position:relative;width:900px;height:500px;}
+.view .pic img{position:absolute;top:0;border-radius:3px}
+/*tipbox*/
+.view .tip{position:absolute;left:50%;bottom:70px;height:110px;width:224px;margin-left:-112px;z-index:99999}
+.view .tip li{position:absolute;float:left;background:url("images/tooltip.png") no-repeat;padding:10px}
+.view .tip a{display:block;width:124px;height:90px;overflow:hidden}
+.view .tip img{height:84px}
+/*btnbox*/
+.view .dot{position:absolute;left:50%;margin-left:-115px;bottom:25px;opacity:0.7;z-index:99999}
+.view .dot:hover{opacity:1.0}
+.view .dot .prev,.view .dot .next{float:left;width:50px;height:44px;background:url("images/slider-controls.png") no-repeat}
+.view .dot .prev{background-position:left}
+.view .dot .next{background-position:right}
+.view .dot .item{float:left;height:44px;padding:0 15px;text-indent:-999em;background:url("images/nav-bg.png") repeat-x}
+.view .dot .item li{float:left;}
+.view .dot .item a{float:left;width:11px;height:12px;margin:16px 4.5px;background:url("images/bullets.png") no-repeat top}
+.view .dot .item a.curr{background-position:bottom}
+</style>
+<script>
+window.onload = function() {
+    var oPic = document.getElementById('pic');
+    var oTip = document.getElementById('tip');
+    var oItem = document.getElementById('item');
+    var oPrev = document.getElementById('prev');
+    var oNext = document.getElementById('next');
+    // 初始化
+    var picnum = 0;
+    var dotlist = '';
+    var aImgsrc = ['images/photo1.jpg','images/photo2.jpg','images/photo3.jpg','images/photo4.jpg','images/photo5.jpg'];
+    var aImglink = ['#','#','#','#','#'];
+    var aThumb = ['images/photo1.jpg','images/photo2.jpg','images/photo3.jpg','images/photo4.jpg','images/photo5.jpg'];
+    var aThumblink = ['#','#','#','#','#'];
+    for (var i = 0; i < aImgsrc.length; i++) {
+        dotlist += '<li><a href="javascript:;">'+i+'</a></li>';
+    };
+    oItem.innerHTML = '<ul>'+dotlist+'</ul>';
+    var aBtn = oItem.getElementsByTagName('a');
+    switchpic();
+    // 切换
+    for (var i = 0; i < aBtn.length; i++) {
+        aBtn[i].index = i;
+        aBtn[i].onclick = function() {
+            picnum = this.index;
+            switchpic();
+        };
+        aBtn[i].onmouseover = function() {
+            oTip.style.display = 'block';
+            oTip.innerHTML = '<ul><li style="left:'+this.index*20+'px"><a href="'+aThumblink[this.index]+'"><img src="'+aThumb[this.index]+'" /></a></li></ul>';
+        };
+        aBtn[i].onmouseout = function() {
+            setTimeout(function(){
+                oTip.style.display = 'none';
+            },500);
+        };
+    };
+    oPrev.onclick = function() {
+        picnum = picnum-1 < 0 ? aImgsrc.length-1 : picnum-1;
+        switchpic();
+    }
+    oNext.onclick = function() {
+        picnum = picnum+1 > aImgsrc.length-1 ? 0 : picnum+1;
+        switchpic();
+    }
+    function switchpic() {
+        for (var i = 0; i < aBtn.length; i++) {
+            aBtn[i].className = '';
+        };
+        oPic.innerHTML = '<ul><li><a href="'+aImglink[picnum]+'"><img src="'+aImgsrc[picnum]+'" /></a></li></ul>';
+        aBtn[picnum].className = 'curr';
+    };
+}
+</script>
+</head>
+
+<body>
+<div id="view" class="view">
+    <div id="pic" class="pic"></div>
+    <div id="tip" class="tip"></div>
+    <div id="dot" class="dot">
+        <a href="javascript:;" class="prev" id="prev"></a>
+        <ul class="item" id="item"></ul>
+        <a href="javascript:;" class="next" id="next"></a>
+    </div>
+</div>
+</body>
+</html>

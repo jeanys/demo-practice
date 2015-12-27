@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>倒计时抢购商品</title>
+    <style>
+        body,ul,li,h1,h2,p{margin: 0; padding: 0}
+        ul{list-style: none}
+        input:focus,button:focus{outline: 0}
+        body,input,button{font: normal 14px Arial,"Microsoft Yahei"; color: #333}
+        .buy-limit{margin: 50px auto; width: 883px}
+        .buy-limit h2{font-weight: normal; line-height: 30px; border-bottom: 2px solid #eee; margin: 0 10px 20px; color: #666}
+        .buy-limit ul{overflow: hidden}
+        .buy-limit ul li{float: left; width: 200px; padding: 0 10px; border-right: 1px solid #ddd; box-sizing: content-box}
+        .buy-limit ul li:last-child{border-right: none}
+        .buy-limit li img{width: 100%; display: block}
+        .buy-limit li form{overflow: hidden}
+        .buy-limit li input{width: 135px; float: left; padding: 4px; border: 1px solid #ddd; margin-right: 5px}
+        .buy-limit li button{width: 50px; float: left; padding: 5px 0; line-height: 1; border: 1px solid #ddd; background: #eee; cursor: pointer; color: #666}
+        .buy-limit li p{line-height: 2.5; text-align: center; font-size: 18px; color: #999}
+        .buy-limit li p span{color: indianred}
+    </style>
+</head>
+
+<body>
+<div class="buy-limit">
+    <h2>限购时间</h2>
+    <ul id="shops">
+        <li>
+            <form action="#">
+                <input type="text"/><button>确定</button>
+            </form>
+            <p>剩余<span>00天00时00分00秒</span></p>
+            <img src="images/pro1.jpg" alt="限购商品"/>
+        </li>
+        <li>
+            <form action="#">
+                <input type="text"/><button>确定</button>
+            </form>
+            <p>剩余<span>00天00时00分00秒</span></p>
+            <img src="images/pro2.jpg" alt="限购商品"/>
+        </li>
+        <li>
+            <form action="#">
+                <input type="text"/><button>确定</button>
+            </form>
+            <p>剩余<span>00天00时00分00秒</span></p>
+            <img src="images/pro3.jpg" alt="限购商品"/>
+        </li>
+        <li>
+            <form action="#">
+                <input type="text"/><button>确定</button>
+            </form>
+            <p>剩余<span>00天00时00分00秒</span></p>
+            <img src="images/pro4.jpg" alt="限购商品"/>
+        </li>
+    </ul>
+</div>
+
+<script>
+    var box = document.getElementById('shops');
+    var input = box.getElementsByTagName('input');
+    var btn = box.getElementsByTagName('button');
+    var text = box.getElementsByTagName('span');
+    var dateArr = ['October 09,2015 20:10:00','October 14,2015 00:00:00','November 14,2015 00:00:00','January 01,2016 00:00:00'];
+    var daySec = 60*60*24;  //一天秒数
+    var HourSec = 60*60;    //一小时秒数
+
+    for(var i=0; i<input.length; i++){
+        input[i].value = dateArr[i];
+        btn[i].index = i;
+        btn[i].onclick = function() {
+            dateArr[this.index] = input[this.index].value;
+            count(this.index);
+        };
+        count(i);
+    };
+
+    function count(index) {
+        text[index].innerHTML = countDown(dateArr[index]);
+        setTimeout(function(){
+            count(index);
+        },1000);
+    };
+    function countDown(dateStr) {
+        var currDate = new Date().getTime();
+        var endDate = new Date(dateStr).getTime();
+        var runTime = Math.floor((endDate - currDate)/1000);
+        if (isNaN(runTime)) {
+            str = '日期无效';
+            return str;
+        } else if (runTime < 0) {
+            str = '倒计时已过期';
+            return str;
+        };
+        var runDay = Math.floor(runTime/daySec);
+        var runHour = Math.floor(runTime%daySec/HourSec);
+        var runMin = Math.floor(runTime%daySec%HourSec/60);
+        var runSec = runTime%60;
+        var str = fixNum(runDay)+'天'+fixNum(runHour)+'时'+fixNum(runMin)+'分'+fixNum(runSec)+'秒';
+        return str;
+    };
+    function fixNum(num) {
+        return num < 10 ? '0'+num : ''+num;
+    };
+</script>
+</body>
+</html>

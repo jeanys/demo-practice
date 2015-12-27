@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QQ列表展开收缩扩展</title>
+<style>
+body{background:#333;cursor:default}
+body,dl,dt,dd{font:normal 14px "Microsoft Yahei";color:#555;padding:0;margin:0}
+.qqlist{width:300px;margin:50px auto;border-radius:10px;box-shadow:0 0 30px rgba(0,0,0,0.9);overflow:hidden}
+.qqlist dl{border-bottom:1px solid #CED0D2;background:#FFF}
+.qqlist dt{background:#eee;line-height:40px;padding:0 20px}
+.qqlist dd{display:none;line-height:30px;padding:0 20px;border-bottom:1px solid #EEF2F4}
+.qqlist dt:hover:before{border-left-color:#666;transition:transform 0.2s}
+.qqlist dt:hover,.qqlist dd:hover,.qqlist dd.curr{background:#f2f2f2;color:#777}
+.qqlist dt.curr,.qqlist dt.curr:hover{background:#42C9E8;color:#FFF}
+.qqlist dt.curr:before{border-left-color:#FFF;transform:rotate(90deg);transform-origin:2px center;transition:transform 0.2s}
+.qqlist dt:before{content:"";display:inline-block;margin-right:5px;width:0;height:0;border:5px solid transparent;border-left-color:#999}
+</style>
+<script>
+window.onload = function() {
+    var qqlist = document.getElementById('qqlist');
+    var aGroup = qqlist.getElementsByTagName('dt');
+    var aPerson = qqlist.getElementsByTagName('dd');
+    var aFriend = [];
+    for (var i = 0; i < aGroup.length; i++) {
+        // aGroup[i].index = i;
+        aGroup[i].onclick = function() {
+            this.className = 'curr';
+            aFriend = this.parentNode.getElementsByTagName('dd');
+            for (var j = 0; j < aFriend.length; j++) {
+                aFriend[j].className = '';
+                if (!this.status) {
+                    aFriend[j].style.display = 'block';
+                } else {
+                    aFriend[j].style.display = 'none';
+                    this.className = '';
+                };
+            };
+            this.status = this.status?false:true;
+        };
+    };
+    for (var i = 0; i < aPerson.length; i++) {
+        aPerson[i].onclick = function() {
+            for (var j = 0; j < aPerson.length; j++) {
+                aPerson[j].className = '';
+            };
+            this.className = 'curr';
+        };
+    };
+}
+</script>
+</head>
+
+<body>
+<div id="qqlist" class="qqlist">
+    <dl>
+        <dt>.-.. --- ...- .</dt>
+        <dd>X .</dd>
+        <dd>张起灵·不朽</dd>
+    </dl>
+    <dl>
+        <dt>fave</dt>
+        <dd>echo璇</dd>
+        <dd>果果1220</dd>
+        <dd>苍月飞鹰</dd>
+        <dd>和中取至</dd>
+        <dd>懶。懶</dd>
+        <dd>小呀么小夙夙</dd>
+    </dl>
+    <dl>
+        <dt>gf</dt>
+        <dd>Ms.Sugar</dd>
+        <dd>巴卫酱</dd>
+        <dd>吴邪·天真</dd>
+        <dd>__醉知酒浓，醒知梦空°</dd>
+        <dd> ゛仲夏夜の欣</dd>
+        <dd>money</dd>
+        <dd>解语花·迟语</dd>
+        <dd>๑  我好胖好圆啊OwO。</dd>
+    </dl>
+</div>
+</body>
+</html>

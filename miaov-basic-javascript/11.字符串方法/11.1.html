@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>查找、替换、删除</title>
+    <style>
+        body,ul,li,p,h1,h2,h3{margin: 0; padding: 0}
+        ul{list-style: none}
+        a{text-decoration: none}
+        input:focus,button:focus{outline: 0}
+        body,input,button{font: normal 14px Arial,"Microsoft Yahei"; color: #3a3a3a}
+        body{background: #FCF4E8; min-height: 800px}
+        a{color: #3a3a3a}
+        .arc-box{position: relative; background: #fff; border: 1px solid #eee; width: 800px; margin: 50px auto; padding: 30px; line-height: 2; box-shadow: 5px 5px 0 rgba(0,0,0,0.2)}
+        .arc-box p{text-indent: 2em; margin: 10px 0}
+        .arc-box em {background: #F2D2A1; font-style: normal}
+        .arc-box h1 span{font-size: 12px; color: #999; font-weight: normal}
+        .arc-menu{position: absolute; right: -100px; top: 0}
+        .arc-menu ul{display: none; overflow: hidden}
+        .menu-link{display: block; background: rgba(0,0,0,0.3); color: #fff; width: 80px; text-align: center; font-size: 16px; margin-bottom: 5px}
+        .menu-link:hover{background: rgba(0,0,0,0.8)}
+        .menu-link:active,.menu-link:focus{background: #F3AA6F}
+        .pop-box{position: fixed; display: none; top: 0; bottom: 0; left: 0; right: 0; width: 300px; height: 120px; border: 5px solid #F36F8B; padding: 20px; background: #FCF4E8; margin: auto auto 100px; box-sizing: content-box; box-shadow: 5px 5px 0 rgba(0,0,0,0.3)}
+        .pop-box .find-tab{overflow: hidden; border-bottom: 2px solid #F3AA6F; line-height: 30px; margin-bottom: 20px}
+        .pop-box .find-tab li{float: left; padding: 0 20px; cursor: pointer}
+        .pop-box .find-tab li.active{background: #F3AA6F; color: #fff}
+        .pop-box .find-main li{display: none}
+        .pop-box .find-main li.active{display: block}
+        .pop-box .find-main li input{border: 1px solid #ddd; padding: 6px 10px; width: 220px; margin-bottom: 5px}
+        .pop-box .find-main li button{float: right; background: #F36F8B; color: #fff; padding: 5px 10px; border: none; cursor: pointer}
+        .pop-box .close{color: #F36F8B; position: absolute; right: 10px; top: 10px}
+    </style>
+</head>
+
+<body>
+<div class="arc-box">
+    <article>
+        <h1>匆匆 <span>朱自清</span></h1>
+        <p>燕子去了，有再来的时候；杨柳枯了，有再青的时候；桃花谢了，有再开的时候。但是，聪明的，你告诉我，我们的日子为什么一去不复返呢？——是有人偷了他们罢：那是谁？又藏在何处呢？是他们自己逃走了罢：现在又到了哪里呢？</p>
+        <p>我不知道他们给了我多少日子；但我的手确乎是渐渐空虚了。在默默里算着，八千多日子已经从我手中溜去；像针尖上一滴水滴在大海里，我的日子滴在时间的流里，没有声音，也没有影子。我不禁头涔涔而泪潸潸了。</p>
+        <p>去的尽管去了，来的尽管来着；去来的中间，又怎样地匆匆呢？早上我起来的时候，小屋里射进两三方斜斜的太阳。太阳他有脚啊，轻轻悄悄地挪移了；我也茫茫然跟着旋转。于是——洗手的时候，日子从水盆里过去；吃饭的时候，日子从饭碗里过去；默默时，便从凝然的双眼前过去。我觉察他去的匆匆了，伸出手遮挽时，他又从遮挽着的手边过去，天黑时，我躺在床上，他便伶伶俐俐地从我身上跨过，从我脚边飞去了。等我睁开眼和太阳再见，这算又溜走了一日。我掩着面叹息。但是新来的日子的影儿又开始在叹息里闪过了。</p>
+        <p>在逃去如飞的日子里，在千门万户的世界里的我能做些什么呢？只有徘徊罢了，只有匆匆罢了；在八千多日的匆匆里，除徘徊外，又剩些什么呢？过去的日子如轻烟，被微风吹散了，如薄雾，被初阳蒸融了；我留着些什么痕迹呢？我何曾留着像游丝样的痕迹呢？我赤裸裸来到这世界，转眼间也将赤裸裸地回去罢？但不能平的，为什么偏要白白走这一遭啊？</p>
+        <p>你聪明的，告诉我，我们的日子为什么一去不复返呢？</p>
+    </article>
+    <div class="arc-menu">
+        <a href="javascript:;" class="menu-link" id="menuBtn">展开</a>
+        <ul id="arcMenu">
+            <li><a href="javascript:;" class="menu-link">查找</a></li>
+            <li><a href="javascript:;" class="menu-link">替换</a></li>
+        </ul>
+    </div>
+</div>
+<div class="pop-box" id="findBox">
+    <ul class="find-tab" id="findTab">
+        <li class="active">查找</li>
+        <li>替换</li>
+    </ul>
+    <ul class="find-main" id="findMain">
+        <li class="active">
+            <form action="#" id="searchForm">
+                <input type="text"/><button type="button">查找</button>
+            </form>
+        </li>
+        <li>
+            <form action="#" id="replaceForm">
+                <input type="text"/><input type="text"/><button type="button">替换</button>
+            </form>
+        </li>
+    </ul>
+    <a href="javascript:;" class="close" id="closeBtn">✖</a>
+</div>
+
+<script>
+    var arcMenu = document.getElementById('arcMenu');
+    var menuBtn = document.getElementById('menuBtn');
+    var menuLink = arcMenu.getElementsByTagName('a');
+    var findBox = document.getElementById('findBox');
+    var closeBtn = document.getElementById('closeBtn');
+    var findTab = document.getElementById('findTab');
+    var findMain = document.getElementById('findMain');
+    var arrTab = findTab.getElementsByTagName('li');
+    var arrMain = findMain.getElementsByTagName('li');
+    var searchForm = document.getElementById('searchForm');
+    var replaceForm = document.getElementById('replaceForm');
+    var searchInput = searchForm.getElementsByTagName('input')[0];
+    var searchBtn = searchForm.getElementsByTagName('button')[0];
+    var replaceInput = replaceForm.getElementsByTagName('input');
+    var replaceBtn = replaceForm.getElementsByTagName('button')[0];
+    var article = document.getElementsByTagName('article')[0];
+
+    menuBtn.onclick = function() {
+        slideTrigger(arcMenu);
+        var text = this.innerText;
+        this.innerText = text == '展开' ? '收缩' : '展开';
+    };
+    menuLink[0].onclick = function() {
+        findBox.style.display = 'block';
+        arrTab[1].className = '';
+        arrMain[1].className = '';
+        arrTab[0].className = 'active';
+        arrMain[0].className = 'active';
+    };
+    menuLink[1].onclick = function() {
+        findBox.style.display = 'block';
+        arrTab[0].className = '';
+        arrMain[0].className = '';
+        arrTab[1].className = 'active';
+        arrMain[1].className = 'active';
+    };
+    closeBtn.onclick = function() {
+        findBox.style.display = 'none';
+        article.innerHTML = lightText(article.innerHTML);
+    };
+    for(var i=0; i<arrTab.length; i++) {
+        arrTab[i].index = i;
+        arrTab[i].onclick = function() {
+            for (var i=0; i<arrMain.length; i++) {
+                arrTab[i].className = '';
+                arrMain[i].className = '';
+            };
+            arrTab[this.index].className = 'active';
+            arrMain[this.index].className = 'active';
+        };
+    };
+    //查找、替换、删除
+    searchBtn.onclick = function() {
+        var text = searchInput.value;
+        if (!text) {
+            alert('查找文本不能为空'); return;
+        };
+        article.innerHTML = lightText(article.innerHTML,text);
+    };
+    replaceBtn.onclick = function() {
+        var orgText = replaceInput[0].value;
+        var newText = replaceInput[1].value;
+        if (!orgText) {
+            alert('查找文本不能为空'); return;
+        };
+        if (!newText) {
+            var result = confirm('是否要删除文章中所有的“'+orgText+'”？');
+            if (!result) return;
+        };
+        article.innerHTML = lightText(article.innerHTML,orgText,newText);
+    };
+    function lightText(text,str,newStr) {
+        text = text.split('<em>').join('');
+        text = text.split('</em>').join('');
+        if (!str) return text;
+        newStr = !newStr ? str : newStr;
+        return text.split(str).join('<em>'+newStr+'</em>');
+    };
+    //切换、滑动切换
+    function slideTrigger(obj) {
+        var curr = getStyle(obj,'display');
+        if (curr == 'none') {
+            hideTrigger(obj);
+            var menuHeight = obj.clientHeight;
+            obj.style.height = '0';
+            animate(obj,'height',menuHeight+'px',5);
+        } else {
+            animate(obj,'height','0px',5,function(){
+                hideTrigger(obj);
+                obj.style.height = '';
+            });
+        };
+    };
+    function hideTrigger(obj) {
+        var curr = getStyle(obj,'display');
+        if (curr == 'none') {
+            obj.style.display = 'block';
+        } else {
+            obj.style.display = 'none';
+        };
+    };
+    //动画对象,动画属性,停止值,速度,回调函数
+    function animate(obj,attr,stop,speed,endFn) {
+        if (obj['timer'+attr]) return;
+        speed = speed ? speed : 50;
+        var unit = stop.replace(/-?\d+/,'');
+        if (unit === '%') {
+            stop = parseInt(getStyle(obj.parentNode,attr)) * (parseInt(stop)/100);
+            unit = 'px';
+        } else {
+            stop = parseInt(stop);
+        };
+        var step = (stop - parseInt(getStyle(obj,attr))) / 50;
+        obj['timer'+attr] = setInterval(function(){
+            var nowStop = Number(parseFloat(getStyle(obj,attr)).toFixed(2));
+            var nextStop = nowStop + step;
+            if ((step > 0 && nextStop >= stop) || (step < 0 && nextStop <= stop)) {
+                obj.style[attr] = stop + unit;
+                clearInterval(obj['timer'+attr]);
+                obj['timer'+attr] = null;
+                endFn && endFn();
+                return;
+            };
+            obj.style[attr] = nextStop + unit;
+        },speed);
+    };
+    function getStyle(obj,attr) {
+        return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj)[attr];
+    };
+</script>
+</body>
+</html>

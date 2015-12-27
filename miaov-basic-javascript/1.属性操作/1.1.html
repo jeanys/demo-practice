@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>2.属性操作-手机对话</title>
+<style>
+body *{font:normal 14px "Microsoft Yahei";color:#666}
+input:focus,button:focus{outline:0}
+.phone{position:relative;background:url("images/phonebg.png") no-repeat;width:346px;height:691px}
+.interface{position:absolute;width:288px;height:518px;top:83px;left:24px;background:#FFF;padding:5px}
+.bar{position:absolute;bottom:0;left:0;line-height:60px;background:#f1f1f1;border-top:1px solid #CCC;width:94%;padding:0 3%;white-space:nowrap}
+.bar a,.bar input,.bar button{border:1px solid #CCC;border-radius:3px;padding:3px 10px;vertical-align:middle}
+.bar a{display:inline-block;padding:8px 10px}
+.bar input{height:32px;width:155px}
+.bar button{background:none;line-height:32px;cursor:pointer}
+.dial{height:448px;overflow-y:auto}
+.dial .per1,.dial .per2{margin:15px 0;overflow:hidden}
+.dial p{margin:0;padding:5px 10px;min-height:20px;max-width:220px;word-wrap:break-word}
+.per1 p{margin-left:5px;float:left;background:#e8e8e8;}
+.per2 p{margin-right:5px;float:right;background:#55c311;color:#FFF}
+.per1 span{float:left}
+.per2 span{float:right}
+.ava1{background:url("images/ava1.gif") no-repeat center;width:22px;height:22px}
+.ava2{background:url("images/ava2.gif") no-repeat center;width:22px;height:22px}
+</style>
+<script>
+window.onload = function() {
+    var oText = document.getElementById('text');
+    var oBtn = document.getElementById('btn');
+    var oAvabtn = document.getElementById('avabtn');
+    var oAvatar = document.getElementById('avatar');
+    var oSence = document.getElementById('sence');
+    var nAva = 1;
+
+    oAvabtn.onclick = function() {
+        if(oAvabtn.className == "ava1") {
+            oAvabtn.className = 'ava2';
+            nAva = 2;
+        } else {
+            oAvabtn.className = 'ava1';
+            nAva = 1;
+        };
+    };
+    oBtn.onclick = function() {
+        var sleft = '<div class="per'+ nAva +'"><span class="ava'+ nAva +'"></span><p>';
+        var sright = '</p></div>';
+        oSence.innerHTML += sleft + oText.value + sright;
+        oText.value = '';
+    };
+};
+</script>
+</head>
+
+<body>
+<div class="phone">
+    <div class="interface">
+        <div class="dial" id="sence"></div>
+        <div class="bar">
+            <a href="javascript:;" id="avabtn" class="ava1"></a>
+            <input type="text" id="text"/>
+            <button type="button" id="btn">发送</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

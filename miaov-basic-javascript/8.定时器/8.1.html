@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>延时消失的菜单</title>
+    <style>
+        body,ul,li{margin: 0; padding: 0}
+        li{list-style: none}
+        a{color: #fff; text-decoration: none}
+        body{font: normal 14px Arial,"Microsoft Yahei";}
+        .nav{position: relative; width: 800px; margin: 50px auto; background: linear-gradient(#DDEBFF,#81AEED 50%,#3E7ACD 50%,#3461A0); border: 1px solid #3461A0; border-radius: 3px}
+        .nav:before,.nav:after{content: ""; display: block; width: 0; height: 0; font-size: 0; clear: both; visibility: hidden}
+        .nav li{float: left; line-height: 30px}
+        .nav li a{display: inline-block; margin: 5px 0; width: 100px; text-align: center}
+        .nav li a span{display: inline-block; width: 80%; border-radius: 3px}
+        .nav li a:hover span{background: rgba(255,255,255,0.3)}
+        .nav>li>a:before,.nav>li>a:after{content: ""; float: left; width: 1px; height: 20px; vertical-align: middle}
+        .nav>li>a:before{background: linear-gradient(transparent,#fff,transparent)}
+        .nav>li>a:after{float: right; background: linear-gradient(transparent,#3461A0,transparent)}
+        .nav li:last-child{float: right}
+        .nav li:last-child a:before,.nav li:nth-child(4) a:after{content: normal}
+        .nav li:last-child a:after{background: linear-gradient(transparent,#fff,transparent)}
+        .nav .sub-nav{display: none; position: absolute; top: 50px; background: linear-gradient(#fff,#DDEBFF); border: 1px solid #A1C8FF; border-radius: 5px}
+        .nav .sub-nav .ico{position: absolute; margin-top: -6px; left: 40px; width: 20px; height: 6px; overflow: hidden}
+        .nav .sub-nav .ico:before{content: ""; display: block; margin: 2px auto; background: #fff; border: 1px solid #A1C8FF; width: 10px; height: 10px; transform: rotate(45deg)}
+        .sub-nav li{line-height: 1em}
+        .sub-nav li a{width: auto; padding: 0 10px; color: #3E7ACD; margin: 7px 0; font-size: 12px; border-right: 1px solid #ccc}
+        .sub-nav li:last-child a{border-right: none}
+    </style>
+</head>
+
+<body>
+<ul class="nav" id="nav">
+    <li>
+        <a href="#"><span>首页</span></a>
+        <ul class="sub-nav">
+            <span class="ico"></span>
+            <li><a href="#">最近更新</a></li>
+            <li><a href="#">活动</a></li>
+            <li><a href="#">报名试听</a></li>
+            <li><a href="#">学员反馈</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="#"><span>关于我们</span></a>
+        <ul class="sub-nav">
+            <span class="ico"></span>
+            <li><a href="#">妙味讲师</a></li>
+            <li><a href="#">培训方式</a></li>
+            <li><a href="#">培训理念</a></li>
+            <li><a href="#">联系我们</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="#"><span>作品</span></a>
+        <ul class="sub-nav">
+            <span class="ico"></span>
+            <li><a href="#">微网站</a></li>
+            <li><a href="#">微商城</a></li>
+            <li><a href="#">微投票</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="#"><span>博客</span></a>
+        <ul class="sub-nav">
+            <span class="ico"></span>
+            <li><a href="#">JS教程</a></li>
+            <li><a href="#">弹出层效果</a></li>
+            <li><a href="#">3D球面标签云</a></li>
+            <li><a href="#">Windows计算器</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="#">&raquo; 更多</a>
+    </li>
+</ul>
+
+<script>
+    var nav = document.getElementById('nav');
+    var li = nav.children;
+    var subnav = nav.getElementsByClassName('sub-nav');
+    var sub = null;
+    var timer = null;
+    for(var i=0; i<li.length; i++) {
+        li[i].index = i;
+        li[i].onmouseover = function() {
+            for(var j=0; j<subnav.length; j++) {
+                subnav[j].style.display = 'none';
+            };
+            sub = subnav[this.index];
+            if (sub) {
+                sub.style.display = 'block';
+            };
+        };
+        li[i].onmouseout = function(event) {
+            var obj = event.toElement || event.relatedTarget;
+            if(this.contains(obj)) return false;
+            timer = setTimeout(function() {
+                if (sub) {
+                    sub.style.display = 'none';
+                };
+            },500);
+        };
+    };
+    for(var i=0; i<subnav.length; i++) {
+        subnav[i].onmouseover = function() {
+            clearTimeout(timer);
+        };
+    };
+</script>
+</body>
+</html>

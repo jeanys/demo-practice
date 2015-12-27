@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>百度列表全选操作</title>
+    <style>
+        body,ul{margin: 0;padding: 0}
+        ul{list-style: none}
+        .music-list{font: normal 12px Arial,"Microsoft Yahei"; width: 400px; margin: 50px auto; border: 1px solid #eee; line-height: 30px; color: #666}
+        .music-list li{overflow: hidden; margin: 1px 0}
+        .music-list li:nth-child(2n){background: #f2f2f2}
+        .music-list li:hover,.music-list li.active{background: #ddd}
+        .music-list li:first-child{margin-top: 0}
+        .music-list span{float: left}
+        .music-list span.check{width: 10%; text-align: center}
+        .music-list span.song{width: 50%}
+        .music-list span.author{width: 40%}
+    </style>
+</head>
+
+<body>
+<ul class="music-list" id="list">
+    <li>
+        <span class="check"><input type="checkbox"/></span>
+        <span class="song">M07</span>
+        <span class="author">梶浦由記</span>
+    </li>
+    <li>
+        <span class="check"><input type="checkbox"/></span>
+        <span class="song">What Are Words</span>
+        <span class="author">Chris Medina</span>
+    </li>
+    <li>
+        <span class="check"><input type="checkbox"/></span>
+        <span class="song">Young & Beautiful</span>
+        <span class="author">Lana Del Rey</span>
+    </li>
+    <li>
+        <span class="check"><input type="checkbox"/></span>
+        <span class="song">last piece</span>
+        <span class="author">日本ACG</span>
+    </li>
+    <li>
+        <span class="check"><input type="checkbox"/></span>
+        <span class="song">Take Me Anywhere</span>
+        <span class="author">Kan R. Gao</span>
+    </li>
+    <li>
+        <span class="check"><input type="checkbox"/></span>
+        <span class="song">恶梦</span>
+        <span class="author">倪安东</span>
+    </li>
+    <li>
+        <span class="check"><input type="checkbox"/></span>
+        <span class="song">Clock Strikes</span>
+        <span class="author">ONE OK ROCK</span>
+    </li>
+    <li>
+        <span class="check"><input type="checkbox"/></span>
+        <span class="song">思凡</span>
+        <span class="author">墨明棋妙</span>
+    </li>
+    <li>
+        <span class="check"><input type="checkbox"/></span>
+        <span class="song">咬唇</span>
+        <span class="author">杨千嬅</span>
+    </li>
+    <li>
+        <span class="check"><input type="checkbox"/></span>
+        <span class="song">Twilight Wanderers</span>
+        <span class="author">Falcom Sound Team jdk</span>
+    </li>
+    <div>
+        <span class="check"><input type="checkbox" id="checkall"/></span>
+        <label for="checkall">全选</label>
+    </div>
+</ul>
+
+<script>
+    var list = document.getElementById('list');
+    var li = list.getElementsByTagName('li');
+    var check = list.getElementsByTagName('input');
+    var btn = document.getElementById('checkall');
+    var num = 0;
+    for (var i=0; i<check.length-1; i++) {
+        check[i].onclick = function() {
+            checklist();
+            if (num == check.length-1) {
+                btn.checked = true;
+            } else {
+                btn.checked = false;
+            };
+        };
+    };
+    btn.onclick = function() {
+        if (this.checked) {
+            for (var i=0; i<check.length-1; i++) {
+                check[i].checked = true;
+                li[i].className = 'active';
+                num = check.length-1;
+            };
+        } else {
+            for (var i=0; i<check.length-1; i++) {
+                check[i].checked = false;
+                li[i].className = '';
+                num = 0;
+            };
+        };
+    };
+    function checklist() {
+        num = 0;
+        var parent = null;
+        for (var i=0; i<check.length-1; i++) {
+            parent = check[i].parentNode.parentNode;
+            if (check[i].checked) {
+                num ++;
+                parent.className = 'active';
+            } else {
+                parent.className = '';
+            };
+        };
+    };
+</script>
+</body>
+</html>

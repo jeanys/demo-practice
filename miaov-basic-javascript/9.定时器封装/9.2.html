@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>上下图片抖起来</title>
+    <style>
+        body{margin: 0; padding: 0}
+        .imglist{position: relative; margin: 30px; height: 100px}
+        .imglist img{width: 100px; height: 100px; position: absolute; top: 0; cursor: pointer}
+    </style>
+</head>
+
+<body>
+<div id="list" class="imglist"></div>
+
+<script>
+    var list = document.getElementById('list');
+    var imgs = list.getElementsByTagName('img');
+    var html = '';
+    for (var i=0; i<10; i++) {
+        html += '<img src="images/baby'+(i+1)+'.gif" style="left:'+i*110+'px" alt="表情"/>'
+    };
+    list.innerHTML = html;
+    for (var i=0; i<imgs.length; i++) {
+        imgs[i].onmouseover = function() {
+            var _this = this;
+            if (_this.shakestu) return;
+            _this.shakestu = true;
+            shake(_this,'left',20,function(){
+                shake(_this,'top',20,function(){
+                    _this.shakestu = false;
+                });
+            });
+        };
+    };
+    function shake(obj,direc,streng,endFn) {
+        var arr = [];
+        var num = 0;
+        for (var i=streng; i>0; i-=2) {
+            arr.push(i,-i);
+        };
+        arr.push(0);
+        obj.timer = setInterval(function(){
+            obj.style[direc] = parseInt(getStyle(obj,direc)) + arr[num] + 'px';
+            num ++;
+            if (num == arr.length) {
+                clearInterval(obj.timer);
+                endFn && endFn();
+            };
+        },50);
+    };
+    function getStyle(obj,attr) {
+        return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj)[attr];
+    };
+</script>
+</body>
+</html>

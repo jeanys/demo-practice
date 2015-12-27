@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>萌萌自定义字体</title>
+    <style>
+        body,ul,li,p{margin: 0; padding: 0}
+        ul{list-style: none}
+        body,textarea,button{font: normal 12px Arial,"Microsoft Yahei"; color: #333}
+        textarea:focus,button:focus{outline: 0}
+        .dialog{width: 500px; margin:50px auto; border: 1px solid #eee; border-radius: 3px}
+        .dialog .output{height: 100px; border-bottom: 1px solid #f2f2f2; padding: 5px; overflow-y: auto}
+        .output p{float: left; clear: left; background: none repeat-x bottom left}
+        .output span{display: inline-block; width: 24px; line-height: 24px; height: 24px; text-align: center; text-shadow: 0 0 3px rgba(0,0,0,1); color: #fff}
+        .select{padding: 5px; position: relative}
+        .select .face{display: block; width: 24px; height: 24px; background: url(images/ico-face.png); background-size: cover; text-indent: -99em}
+        .face-list{display: none; position: absolute; left: 35px; top: 0; overflow: hidden; width: 231px; border: 1px solid #CCC}
+        .face-list li{float: left; width: 24px; height: 24px; text-indent: -99em; border-right: 1px solid #eee; padding: 2px; background: #fff none no-repeat center}
+        .face-list li:last-child{border-right: 0}
+        .face-list li.active{background-color: #FCF5EB}
+        .input{padding: 0 5px 5px}
+        .input textarea{width: 100%; height: 50px; border: none; resize: none}
+        .input button{background: #DE6572; color: #fff; border: none; border-radius: 3px; padding: 3px 15px; cursor: pointer}
+        .input button:active{background: #D54D5B}
+        .dialog .sun{background-image: url(images/sun.png)}
+        .dialog .moon{background-image: url(images/moon.png)}
+        .dialog .heart{background-image: url(images/heart.png)}
+        .dialog .rose{background-image: url(images/rose.png)}
+        .dialog .diamond{background-image: url(images/diamond.png)}
+        .dialog .pig{background-image: url(images/pig.png)}
+        .dialog .banana{background-image: url(images/banana.png)}
+        .dialog .yeah{background-image: url(images/yeah.png)}
+    </style>
+</head>
+
+<body>
+<div class="dialog">
+    <div class="output" id="output"></div>
+    <div class="select">
+        <a href="javascript:;" class="face" id="face">表情</a>
+        <ul class="face-list" id="faceList">
+            <li class="sun">太阳</li>
+            <li class="moon">月亮</li>
+            <li class="heart">心形</li>
+            <li class="rose">玫瑰</li>
+            <li class="diamond">钻石</li>
+            <li class="pig">猪头</li>
+            <li class="banana">香蕉</li>
+            <li class="yeah">哦耶</li>
+        </ul>
+    </div>
+    <div class="input">
+        <textarea id="input"></textarea>
+        <button id="btn">确定</button>
+        <button id="reset">清屏</button>
+    </div>
+</div>
+
+<script>
+    var input = document.getElementById('input');
+    var output = document.getElementById('output');
+    var btn = document.getElementById('btn');
+    var reset = document.getElementById('reset');
+    var link = document.getElementById('face');
+    var faceList = document.getElementById('faceList');
+    var faceArr = faceList.getElementsByTagName('li');
+    var face = 'rose';
+
+    input.focus();
+
+    link.onclick = function() {
+        if (getStyle(faceList,'display') == 'none') {
+            faceList.style.display = 'block';
+        } else {
+            faceList.style.display = 'none';
+        };
+    };
+    btn.onclick = function() {
+        var text = input.value;
+        if (!text) return;
+        text = text.split('').join('</span><span>');
+        text = '<span>'+text+'</span>';
+        output.innerHTML += '<p class="'+face+'">'+text+'</p>';
+        input.value = '';
+        input.focus();
+    };
+    reset.onclick = function() {
+        output.innerHTML = '';
+    };
+    for(var i=0; i<faceArr.length; i++) {
+        faceArr[i].onclick = function() {
+            face = this.className;
+            for (var i=0; i<faceArr.length; i++) {
+                faceArr[i].className = rmvClass(faceArr[i],'active');
+            };
+            this.className += ' active';
+        };
+    };
+    function rmvClass(obj,str) {
+        var text = obj.className;
+        text = text.split(str).join('');
+        text = text.split(' ').join('');
+        return text;
+    };
+    function getStyle(obj,attr) {
+        return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj)[attr];
+    };
+</script>
+</body>
+</html>

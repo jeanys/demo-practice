@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>百度网盘列表编辑</title>
+    <style>
+        body,ul,p{margin:0;padding: 0}
+        ul{list-style: none}
+        a{color: #333; text-decoration: none}
+        body,input{font: normal 14px Arial,"Microsoft Yahei"; color: #666}
+        .folder{width: 500px; margin: 50px auto; border: 1px solid #eee}
+        .folder li{line-height: 30px; border-bottom: 1px solid #eee; margin: 0 10px; padding: 5px 0}
+        .folder li:last-child{border-bottom: none}
+        .folder li p{display: inline-block; width: 200px; padding: 0 5px}
+        .folder li a{background: #D38983; color: #fff; border-radius: 3px; font-size: 12px; padding: 3px 5px}
+        .folder li span a{background: #90BAD8}
+        .folder li span{display: none}
+        .folder li input{border:1px solid #ddd; box-shadow: 0 0 3px rgba(0,0,0,.1); padding: 3px 4px; width: 190px; margin-right: 10px}
+        .folder li input:focus{outline: none}
+    </style>
+</head>
+
+<body>
+<ul class="folder" id="list">
+    <li>
+        <div>
+            <p>Web开发前后端汇总</p>
+            <a href="javascript:;">编辑</a>
+        </div>
+        <span>
+            <input type="text"/>
+            <a href="javascript:;">保存</a>
+            <a href="javascript:;">取消</a>
+        </span>
+    </li>
+    <li>
+        <div>
+            <p>设计美术教程素材</p>
+            <a href="javascript:;">编辑</a>
+        </div>
+        <span>
+            <input type="text"/>
+            <a href="javascript:;">保存</a>
+            <a href="javascript:;">取消</a>
+        </span>
+    </li>
+    <li>
+        <div>
+            <p>健身美妆自我管理</p>
+            <a href="javascript:;">编辑</a>
+        </div>
+        <span>
+            <input type="text"/>
+            <a href="javascript:;">保存</a>
+            <a href="javascript:;">取消</a>
+        </span>
+    </li>
+    <li>
+        <div>
+            <p>精品绿色便携软件</p>
+            <a href="javascript:;">编辑</a>
+        </div>
+        <span>
+            <input type="text"/>
+            <a href="javascript:;">保存</a>
+            <a href="javascript:;">取消</a>
+        </span>
+    </li>
+    <li>
+        <div>
+            <p>历史文化其他学术</p>
+            <a href="javascript:;">编辑</a>
+        </div>
+        <span>
+            <input type="text"/>
+            <a href="javascript:;">保存</a>
+            <a href="javascript:;">取消</a>
+        </span>
+    </li>
+</ul>
+
+<script>
+    var list = document.getElementById('list');
+    var div = list.getElementsByTagName('div');
+    var span = list.getElementsByTagName('span');
+    var input = list.getElementsByTagName('input');
+    var text = [], edit = [], save = [], cancel = [];
+    for (var j=0; j<div.length; j++) {
+        text.push(div[j].getElementsByTagName('p')[0]);
+        edit.push(div[j].getElementsByTagName('a')[0]);
+        save.push(span[j].getElementsByTagName('a')[0]);
+        cancel.push(span[j].getElementsByTagName('a')[1]);
+    };
+    for (var i=0; i<edit.length; i++) {
+        edit[i].index = i;
+        edit[i].onclick = function() {
+            efold(this.index,0);
+
+        };
+        save[i].index = i;
+        save[i].onclick = function() {
+            efold(this.index,1);
+        };
+        cancel[i].index = i;
+        cancel[i].onclick = function() {
+            efold(this.index,2);
+        };
+    };
+    function efold(index,op) {
+        if (op == 0) input[index].value = text[index].innerText;
+        if (op == 1) text[index].innerText = input[index].value;
+        div[index].style.display = (op==0) ? 'none' : 'block';
+        span[index].style.display = (op==0) ? 'block': 'none';
+    };
+</script>
+</body>
+</html>

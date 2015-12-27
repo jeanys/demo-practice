@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>for循环-阵列3</title>
+<style>
+body,button{background:#222;font-family:"Microsoft Yahei"}
+button:focus{outline:0}
+#btn{background:#f30;border:0;padding:10px 20px;margin:20px 0;border-radius:3px;cursor:pointer;color:#FFF;font-size:20px}
+#container{position:relative;margin:0;padding:0;list-style:none}
+#container li{position:absolute;left:0;top:0;width:100px;height:100px;line-height:100px;background:rgb(0,100,200);border:1px solid #333;color:#FFF;text-align:center;font-size:50px}
+</style>
+<script>
+window.onload = function() {
+    var oUl = document.getElementById('container');
+    var oBtn = document.getElementById('btn');
+    var aLi = oUl.getElementsByTagName('li');
+    var num = 5;
+    var mode = 0;
+    oBtn.onclick = function() {
+        oUl.innerHTML = '';
+        for(var i=0; i<num; i++){
+            oUl.innerHTML += '<li></li>';
+            aLi[i].innerHTML = i;
+            aLi[i].style.opacity = 1-(i/num);
+            aLi[i].style.left = i*110+'px';
+            aLi[i].style.top = i*110+'px';
+            if(mode == 0){
+                if(i<num/2){
+                    aLi[i].style.top = i*110+'px';
+                } else {
+                    aLi[i].style.top = (num-i-1)*110+'px';
+                };
+            } else if(mode == 1) {
+                if(i<num/2){
+                    aLi[i].style.top = (num/2-i)*110+'px';
+                } else {
+                    aLi[i].style.top = (i-num/2+1)*110+'px';
+                };
+            } else if(mode == 2) {
+                if(i<num/2){
+                    aLi[i].style.left = i*110+'px';
+                } else {
+                    aLi[i].style.left = (num-i-1)*110+'px';
+                };
+            } else if(mode == 3) {
+                if(i<num/2){
+                    aLi[i].style.left = (num/2-i)*110+'px';
+                } else {
+                    aLi[i].style.left = (i-num/2+1)*110+'px';
+                };
+            }
+        };
+        mode++;
+        if(mode == 5) mode = 0;
+    };
+};
+</script>
+</head>
+
+<body>
+<button id="btn">生成</button>
+<ul id="container"></ul>
+</body>
+</html>

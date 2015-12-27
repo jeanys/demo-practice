@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>随即图片排序</title>
+    <style>
+        body,ul,li,p{margin: 0; padding: 0}
+        ul{list-style: none}
+        body{font: normal 14px Arial,"SimHei","Microsoft Yahei"; color: #3a3a3a}
+        a{color: #3a3a3a}
+        .sort-list{overflow: hidden; width: 620px; margin: 100px auto; padding: 30px 30px 20px; border: 1px solid #f2f2f2; box-sizing: content-box; text-align: center}
+        .sort-list .sort-btn{display: inline-block; background: #CCC; color: #fff; padding: 10px 20px; margin: 0 5px; text-decoration: none}
+        .sort-list .sort-btn.active{background: dodgerblue}
+        .sort-list ul{margin: 20px 0 0; overflow: hidden}
+        .sort-list li{float: left; width: 200px; margin: 0 10px 0 0}
+        .sort-list li p{line-height: 30px}
+        .sort-list li:nth-child(3n){margin-right: 0}
+        .sort-list li img{width: 100%; display: block}
+    </style>
+</head>
+
+<body>
+<div class="sort-list">
+    <div id="btn">
+        <a href="javascript:;" class="sort-btn">从大到小</a>
+        <a href="javascript:;" class="sort-btn">打乱顺序</a>
+    </div>
+    <ul id="list"></ul>
+</div>
+
+<script>
+    var list = document.getElementById('list');
+    var btn = document.getElementById('btn');
+    var btn1 = btn.getElementsByTagName('a')[0];
+    var btn2 = btn.getElementsByTagName('a')[1];
+    var imgJson = [
+        {src: 'site-google.png', name: 'Google'},
+        {src: 'site-baidu.png', name: '百度'},
+        {src: 'site-weibo.png', name: '微博'},
+        {src: 'site-zhihu.png', name: '知乎'},
+        {src: 'site-w3cfuns.png', name: 'W3Cfuns'},
+        {src: 'site-w3school.png', name: 'W3School'},
+        {src: 'site-netease.png', name: '网易'},
+        {src: 'site-zcool.png', name: '站酷'},
+        {src: 'site-douban.png', name: '豆瓣'},
+    ];
+    var index = [];
+
+    btn1.onclick = btn2.onclick = function() {
+        resort(this);
+    };
+    btn1.click();
+
+    function resort(obj) {
+        var another = obj == btn1 ? btn2 : btn1;
+        if (obj == btn1) {
+            for (var i = 0; i < imgJson.length; i++) {
+                index[i] = i;
+            };
+        } else {
+            index.sort(function(){
+                return Math.random() - 0.5;
+            });
+        };
+        obj.className += ' active';
+        another.className = rmvClass(another,'active');
+        insertImg();
+    };
+    function insertImg() {
+        var html = '';
+        for (var i=0; i<imgJson.length; i++) {
+            html += '<li><img src="images/'+imgJson[index[i]].src+'" alt="'+imgJson[index[i]].name+'"/><p>'+(i+1)+'.'+imgJson[index[i]].name+'</p></li>';
+        };
+        list.innerHTML = html;
+    };
+    function rmvClass(obj,str) {
+        var text = obj.className;
+        text = text.split(str).join('');
+        text = text.split(' ').join('');
+        return text;
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>按钮控制垂直滚动</title>
+    <style>
+        body,h3,ul,li{margin: 0; padding: 0}
+        li{list-style: none}
+        body{font: normal 14px Arial,"Microsoft Yahei"; color: #333}
+        a{color: #333; text-decoration: none}
+        .prolist{width: 200px; margin: 30px auto}
+        .prolist h3{background: #5578A9; padding: 0 10px; line-height: 30px; font-size: 14px; color: #fff; font-weight: normal}
+        .prolist h3 a{color: #fff; float: right; font-size: 12px}
+        .prolist .main{position: relative; height: 300px; overflow: hidden; padding: 26px 0; border: 1px solid #DDE7ED}
+        .prolist ul{padding: 5px 10px; position: absolute}
+        .prolist li img{width: 100%; height: 100px; display: block; margin: 5px 0; padding: 3px; border: 1px solid #eee; box-sizing: border-box}
+        .prev,.next{position: absolute; left: 0; width: 100%; padding: 5px 0; background: rgba(236, 240, 242, 0.95)}
+        .prev{top: 0}
+        .next{bottom: 0}
+        .prev i,.next i{display: block; width: 16px; height: 16px; border-radius: 50%; margin: 0 auto; background: #9AA9BE}
+        .prev i:after,.next i:after{content: ""; position: relative; display: block; border: 5px solid transparent; width: 0; margin: 0 auto}
+        .prev i:after{border-bottom-color: #fff}
+        .next i:after{border-top-color: #fff; bottom: -5px}
+    </style>
+</head>
+
+<body>
+<div class="prolist">
+    <h3>妙味课堂<a href="#">更多 &raquo;</a></h3>
+    <div class="main" id="wrap">
+        <ul id="scroll">
+            <li><img src="images/pro1.jpg" alt="商品图片"/></li>
+            <li><img src="images/pro2.jpg" alt="商品图片"/></li>
+            <li><img src="images/pro3.jpg" alt="商品图片"/></li>
+            <li><img src="images/pro4.jpg" alt="商品图片"/></li>
+            <li><img src="images/pro5.jpg" alt="商品图片"/></li>
+        </ul>
+        <a href="javascript:;" class="prev" id="prev"><i></i></a>
+        <a href="javascript:;" class="next" id="next"><i></i></a>
+    </div>
+</div>
+
+<script>
+    var div = document.getElementById('wrap');
+    var ul = document.getElementById('scroll');
+    var prev = document.getElementById('prev');
+    var next = document.getElementById('next');
+    var diff =  div.scrollHeight - div.clientHeight;
+    var padd = prev.clientHeight;
+    var step = padd;
+    var timer = null;
+    var mode;
+    function scroll() {
+        if (mode == 0) {
+            step--;
+            if (step < -diff) step = -diff;
+        } else if (mode == 1) {
+            step++;
+            if (step > padd) step = padd;
+        };
+        ul.style.top = step+'px';
+    };
+    prev.onmousedown = function() {
+        mode = 0;
+        timer = setInterval(scroll,10);
+    };
+    prev.onmouseup = function() {
+        clearInterval(timer);
+    };
+    next.onmousedown = function() {
+        mode = 1;
+        timer = setInterval(scroll,10);
+    };
+    next.onmouseup = function() {
+        clearInterval(timer);
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>图片时钟基础版</title>
+    <style>
+        body{margin: 0; padding: 0}
+        .clock{overflow: hidden; width: 840px; margin: 100px auto}
+        .clock img{float: left; width: 100px; margin-right: 5px}
+    </style>
+</head>
+
+<body>
+<div class="clock" id="clock">
+    <img src="images/0.jpg" alt="时"/>
+    <img src="images/0.jpg" alt="时"/>
+    <img src="images/colon.jpg" alt="："/>
+    <img src="images/0.jpg" alt="分"/>
+    <img src="images/0.jpg" alt="分"/>
+    <img src="images/colon.jpg" alt="："/>
+    <img src="images/0.jpg" alt="秒"/>
+    <img src="images/0.jpg" alt="秒"/>
+</div>
+
+<script>
+    var clock = document.getElementById('clock');
+    var img = clock.getElementsByTagName('img');
+    var currDate = null;
+
+    initDate();
+    setInterval(initDate,1000);
+
+    function initDate() {
+        currDate = new Date();
+        var currHour = currDate.getHours();
+        var currMinute = currDate.getMinutes();
+        var currSecond = currDate.getSeconds();
+        var str = fixNum(currHour) +':'+ fixNum(currMinute) +':'+ fixNum(currSecond);
+
+        for (var i=0; i<img.length; i++) {
+            if (i==2 || i==5) continue;
+            img[i].src = 'images/' + str.substr(i,1) + '.jpg';
+        };
+    };
+
+    function fixNum(num) {
+        return num < 10 ? '0'+num : ''+num;
+    };
+    function getStyle(obj,attr) {
+        return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj)[attr];
+    };
+</script>
+</body>
+</html>

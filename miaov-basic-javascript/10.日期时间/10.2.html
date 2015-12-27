@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>图片时钟扩展版</title>
+    <style>
+        body{margin: 0; padding: 0}
+        .clock{overflow: hidden; width: 840px; margin: 100px auto}
+        .clock span{float: left; position: relative; width: 100px; height: 141px; overflow: hidden; margin-right: 5px}
+        .clock img{display: block; position: absolute; width: 100px; top: 0}
+    </style>
+</head>
+
+<body>
+<div class="clock" id="clock">
+    <span><img src="images/0.jpg" alt="时"/></span>
+    <span><img src="images/0.jpg" alt="时"/></span>
+    <span><img src="images/colon.jpg" alt="："/></span>
+    <span><img src="images/0.jpg" alt="分"/></span>
+    <span><img src="images/0.jpg" alt="分"/></span>
+    <span><img src="images/colon.jpg" alt="："/></span>
+    <span><img src="images/0.jpg" alt="秒"/></span>
+    <span><img src="images/0.jpg" alt="秒"/></span>
+</div>
+
+<script>
+    var clock = document.getElementById('clock');
+    var unit = clock.getElementsByTagName('span');
+    var currDate = null;
+
+    initDate();
+    setInterval(initDate,1000);
+
+    function initDate() {
+        currDate = new Date();
+        var currHour = currDate.getHours();
+        var currMinute = currDate.getMinutes();
+        var currSecond = currDate.getSeconds();
+        var str = fixNum(currHour) +':'+ fixNum(currMinute) +':'+ fixNum(currSecond);
+        var prevArr = [];
+
+        for (var i=0; i<unit.length; i++) {
+            if (i==2 || i==5) continue;
+            var path = str.substr(i,1) + '.jpg';
+            var img = unit[i].getElementsByTagName('img')[0];
+            if (img.src.match(/\d.jpg/)[0] == path) continue;
+            // create new img
+            var node = document.createElement('img');
+            node.setAttribute('src','images/' + path);
+            node.style.top = '141px';
+            var newNode = unit[i].appendChild(node);
+            doMove(newNode,'top',10,10,0);
+            // delete prev img
+            prevArr.push(doMove(newNode.previousSibling,'top',10,10,-141,function(){
+                prevArr[0].parentNode.removeChild(prevArr[0]);
+                prevArr.shift();
+            }));
+        };
+    };
+
+    function fixNum(num) {
+        return num < 10 ? '0'+num : ''+num;
+    };
+    function doMove(obj,direc,speed,dist,endSpot,endFn) {
+        clearInterval(obj.timer);
+        endSpot = parseInt(endSpot);
+        var startSpot = parseInt(getStyle(obj,direc));
+        if (startSpot === endSpot) return;
+        obj.timer = setInterval(function(){
+            var nowSpot = parseInt(getStyle(obj,direc));
+            var nextSpot = nowSpot < endSpot ? nowSpot+dist : nowSpot-dist;
+            if ((startSpot < endSpot && nextSpot >= endSpot) || (startSpot > endSpot && nextSpot <= endSpot)) {
+                obj.style[direc] = endSpot +'px';
+                clearInterval(obj.timer);
+                endFn && endFn();
+                return;
+            }
+            obj.style[direc] = nextSpot +'px';
+        },speed);
+        return obj;
+    };
+    function getStyle(obj,attr) {
+        return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj)[attr];
+    };
+</script>
+</body>
+</html>

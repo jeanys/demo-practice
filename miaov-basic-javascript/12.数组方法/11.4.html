@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>消除表情小游戏</title>
+    <style>
+        body,h1,h2,h3,p{margin: 0; padding: 0}
+        body,input,button{background: #f2efe9; font: normal 14px "Microsoft Yahei"; color: #595959}
+        input:focus,button:focus{outline: 0}
+        a{color: #595959; text-decoration: none}
+        .game{width: 1000px; margin: 0 auto; position: relative; text-align: center}
+        .game h1{font-size: 30px; font-weight: lighter; padding: 10px 0; width: 300px; margin: 50px auto 20px; color: #fa688a; background: linear-gradient(#F7F1E5,#F1E7D3); border: 1px solid #D7D0C1; border-radius: 10px; box-shadow: inset 0 1px 2px #fff, inset 0 -1px 2px rgba(0,0,0,0.3); cursor: default}
+        .game button{margin: 20px; background: #65cedf; border: none; color: #fff; padding: 5px 10px; cursor: pointer; font-size: 16px}
+        .game button:hover{background: #5BC9DA}
+        .game .canvas{position: absolute; width: 100%; top: 175px; border: 1px solid #e7e0d2; height: 500px; background: #fff; border-radius: 3px; box-shadow: 0 0 5px rgba(0,0,0,0.1)}
+        .game .label{position: absolute; text-align: left; left: -140px; width: 120px; background: linear-gradient(-30deg,#FFACBF 49%,#FBA0B5 50%); padding: 10px; box-sizing: content-box; color: #Fff; line-height: 1.5}
+        .game .label span{margin: 0 5px}
+        .game .match{overflow: hidden; position: relative; height: 100%}
+        .game .match img{position: absolute; cursor: pointer}
+    </style>
+</head>
+
+<body>
+<div class="game">
+    <h1>恋爱FACE消消看</h1>
+    <p>游戏说明：点击“开始游戏”，随机掉下表情，指向它，千万别让它掉下去！！</p>
+    <button id="start">开始游戏</button>
+    <div class="canvas">
+        <span class="label" id="count">
+            <p>第<span>0</span>关</p>
+            <p>得分：<span>0</span>分</p>
+            <p>失误：<span>0</span>分</p>
+        </span>
+        <div class="match" id="match"></div>
+    </div>
+</div>
+
+<script>
+    var match = document.getElementById('match');
+    var start = document.getElementById('start');
+    var face = match.getElementsByTagName('img');
+    var count = document.getElementById('count').getElementsByTagName('span');
+    var imgList = ['sun.png','moon.png','heart.png','rose.png','diamond.png','pig.png','banana.png','yeah.png'];
+    var gateScore = [0,5,10,15,20];
+    var gate,score,point;
+    var timer = null;
+
+    start.onclick = function() {
+        gate = 1;
+        score = 0;
+        point = 0;
+        count[0].innerText = gate;
+        count[1].innerText = score;
+        count[2].innerText = point;
+        dropFace();
+    };
+    function dropFace() {
+        //left随机值
+        var pos = Math.floor(Math.random()*(parseInt(getStyle(match,'width'))-24));
+        //创建新表情
+        var faceImg = document.createElement('img');
+        faceImg.src = 'images/'+imgList[Math.floor(Math.random()*imgList.length)];
+        faceImg.style.top = 0;
+        faceImg.style.left = pos+'px';
+        match.appendChild(faceImg);
+        //幕布底线
+        var botLine = parseInt(getStyle(match,'height'));
+        //表情下落动画
+        var over = doMove(faceImg,'top',10,gate,botLine+'px',function(){
+            //没被消除
+            point++;
+            count[2].innerText = point;
+            shake(match.parentNode,'top',10);
+            match.removeChild(faceImg);
+            //失误数大于等于3终止游戏
+            if (point >= 3) {
+                endFace();
+                alert('游戏结束');
+                return true;
+            };
+        });
+        if (over) return;
+        //表情交互
+        faceImg.onmouseover = function() {
+            shake(this,'left',10,function(){
+                //消除得分
+                score++;
+                count[1].innerText = score;
+                match.removeChild(faceImg);
+                //通关
+                if (score === gateScore[gateScore.length-1]){
+                    endFace();
+                    alert('恭喜通关');
+                    return;
+                };
+                //下一关
+                if (score === gateScore[gate]){
+                    gate++;
+                    count[0].innerText = gate;
+                    alert('进入下一关');
+                };
+            });
+        };
+        //回调创建表情
+        timer = setTimeout(dropFace,1000*(5-gate));
+    };
+    function endFace() {
+        var faceNum = face.length;
+        for (var i=0; i<faceNum; i++) {
+            match.removeChild(face[0]);
+        };
+        clearTimeout(timer);
+    };
+
+    function shake(obj,direc,streng,endFn) {
+        if (obj.shakeNow) return;
+        obj.shakeNow = true;
+        var arr = [];
+        var num = 0;
+        for (var i=streng; i>0; i-=2) {
+            arr.push(i,-i);
+        };
+        arr.push(0);
+        obj.timer = setInterval(function(){
+            obj.style[direc] = parseInt(getStyle(obj,direc)) + arr[num] + 'px';
+            num ++;
+            if (num == arr.length) {
+                clearInterval(obj.timer);
+                obj.shakeNow = false;
+                endFn && endFn();
+            };
+        },50);
+    };
+    function doMove(obj,direc,speed,dist,endSpot,endFn) {
+        clearInterval(obj.timer);
+        endSpot = parseInt(endSpot);
+        var startSpot = parseInt(getStyle(obj,direc));
+        if (startSpot === endSpot) return;
+        obj.timer = setInterval(function(){
+            var nowSpot = parseInt(getStyle(obj,direc));
+            var nextSpot = nowSpot < endSpot ? nowSpot+dist : nowSpot-dist;
+            if ((startSpot < endSpot && nextSpot >= endSpot) || (startSpot > endSpot && nextSpot <= endSpot)) {
+                obj.style[direc] = endSpot +'px';
+                clearInterval(obj.timer);
+                endFn && endFn();
+                return;
+            }
+            obj.style[direc] = nextSpot +'px';
+        },speed)
+    };
+    function getStyle(obj,attr) {
+        return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj)[attr];
+    };
+</script>
+</body>
+</html>

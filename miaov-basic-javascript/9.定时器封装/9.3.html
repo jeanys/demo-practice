@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>点击加分淡出条</title>
+    <style>
+        body{margin: 0; padding: 0}
+        ul{list-style: none; margin: 0; padding: 0}
+        .score{position: relative; border: 1px solid #666; width: 520px; margin: 200px auto 0; color: #333}
+        .score ul{padding: 10px}
+        .score ul:after{content: ""; display: block; height: 0; font-size: 0; clear: both; visibility: hidden}
+        .score li{float: left; width: 50px; line-height: 50px; text-align: center; font-size: 30px; position: relative; z-index: 9; top: 0}
+        .score .bgc{position: absolute; background: lightpink; width: 0%; height: 100%; top: 0; left: 0; opacity: 0}
+    </style>
+</head>
+
+<body>
+<div class="score" id="score">
+    <ul>
+        <li>+1</li>
+        <li>+1</li>
+        <li>+1</li>
+        <li>+1</li>
+        <li>+1</li>
+        <li>+1</li>
+        <li>+1</li>
+        <li>+1</li>
+        <li>+1</li>
+        <li>+1</li>
+    </ul>
+    <span class="bgc"></span>
+</div>
+
+<script>
+    var score = document.getElementById('score');
+    var items = score.getElementsByTagName('li');
+    var bgColor = score.getElementsByTagName('span')[0];
+    score.onclick = function() {
+        animate(bgColor,'width','100%',10);
+        animate(bgColor,'opacity','1',10,function() {
+            animate(bgColor,'opacity','0',10);
+        });
+        //依次让+1上飘
+        var num = 0;
+        var timer = setInterval(function(){
+            animate(items[num],'top','-200px',10);
+            animate(items[num],'opacity','0',10);
+            num++;
+            if (num == items.length) clearInterval(timer);
+        },150)
+    };
+    //动画对象,动画属性,停止值,速度,回调函数
+    function animate(obj,attr,stop,speed,endFn) {
+        //不能重复动画
+        if (obj['timer'+attr]) return;
+        //默认速度50
+        speed = speed ? speed : 50;
+        //匹配单位
+        var unit = stop.replace(/-?\d+/,'');
+        //百分比单位转换为像素（根据父级属性，适用于width,height,position）
+        if (unit === '%') {
+            stop = parseInt(getStyle(obj.parentNode,attr)) * (parseInt(stop)/100);
+            unit = 'px';
+        } else {
+            stop = parseInt(stop);
+        };
+        //每次动画运动步长
+        var step = (stop - parseInt(getStyle(obj,attr))) / 50;
+        //为每个对象的每个属性设定不同的计时器
+        obj['timer'+attr] = setInterval(function(){
+            var nowStop = Number(parseFloat(getStyle(obj,attr)).toFixed(2));
+            var nextStop = nowStop + step;
+            //根据停止值停止动画
+            if ((step > 0 && nextStop >= stop) || (step < 0 && nextStop <= stop)) {
+                obj.style[attr] = stop + unit;
+                clearInterval(obj['timer'+attr]);
+                obj['timer'+attr] = null;
+                endFn && endFn();
+                return;
+            };
+            obj.style[attr] = nextStop + unit;
+        },speed);
+    };
+    function getStyle(obj,attr) {
+        return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj)[attr];
+    };
+</script>
+</body>
+</html>

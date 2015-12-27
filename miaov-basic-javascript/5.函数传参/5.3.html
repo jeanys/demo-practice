@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>选项卡嵌套</title>
+    <style>
+        body,ul,p{margin: 0; padding: 0}
+        ul{list-style: none}
+        body{font: normal 12px Arial,"Microsoft Yahei"; color: #666}
+        .tab{width: 250px; margin: 30px auto; border: 1px solid #f3f3f3; overflow: hidden}
+        .tab-tit{height: 200px; float: left; width: 50px; text-align: center}
+        .tab-tit li{border-bottom: 1px solid #eee; height: 66.66px; line-height: 20px; padding: 13px 0; border-top: 1px solid #fff; background: #f3f3f3; box-sizing: border-box; cursor: pointer}
+        .tab-tit li:first-child{height: 67.66px; border-top: none}
+        .tab-tit li:last-child{height: 67.66px; border-bottom: none}
+        .tab-tit li.active{background: #666; color: #fff}
+        .tab-tit li:hover{color: #7BCEEC}
+        .tab-cont{float: left; width: 200px}
+        .tab-cont .pro-img img{display: none; width: 200px}
+        .tab-cont .pro-img img.active{display: block}
+        .tab-cont li{position: relative; display: none}
+        .tab-cont li.active{display: block}
+        .tab-cont .pro-tit{overflow: hidden; color: #fff; position: absolute; bottom: 0}
+        .tab-cont .pro-tit p{float: left; width: 100px; text-align: center; background: rgba(0,0,0,.5); line-height: 30px; cursor: pointer}
+        .tab-cont .pro-tit p:hover,.tab-cont .pro-tit p.active{background: rgba(123,206,236,0.5)}
+    </style>
+</head>
+
+<body>
+<div class="tab" id="tab">
+    <ul class="tab-tit">
+        <li class="active">MUJI<br>服装</li>
+        <li>MUJI<br>其他</li>
+        <li>MUJI<br>生活</li>
+    </ul>
+    <ul class="tab-cont">
+        <li class="active">
+            <div class="pro-img">
+                <img class="active" src="images/pro1.jpg" alt="印度棉束腰上衣"/>
+                <img src="images/pro2.jpg" alt="女士棉运动鞋"/>
+            </div>
+            <div class="pro-tit">
+                <p class="active">印度棉束腰上衣</p>
+                <p>女士棉运动鞋</p>
+            </div>
+        </li>
+        <li>
+            <div class="pro-img">
+                <img class="active" src="images/pro3.jpg" alt="直角运动袜"/>
+                <img src="images/pro4.jpg" alt="腈纶毛毯 浅米色"/>
+            </div>
+            <div class="pro-tit">
+                <p class="active">直角运动袜</p>
+                <p>腈纶毛毯 浅米色</p>
+            </div>
+        </li>
+        <li>
+            <div class="pro-img">
+                <img class="active" src="images/pro5.jpg" alt="香 白檀 15支装"/>
+                <img src="images/pro6.jpg" alt="金合欢 木制钵"/>
+            </div>
+            <div class="pro-tit">
+                <p class="active">香 白檀 15支装</p>
+                <p>金合欢 木制钵</p>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<script>
+    var tab = document.getElementById('tab');
+    var ul = tab.getElementsByTagName('ul');
+    var tabTit = ul[0].getElementsByTagName('li');
+    var tabCont = ul[1].getElementsByTagName('li');
+    var proImg = [], proTit = [];
+    for (var i=0; i<tabTit.length; i++) {
+        tabTit[i].index = i;
+        tabTit[i].onclick = function() {
+            switchTab(this,tabCont,tabTit);
+        };
+    };
+    for (var i=0; i<tabCont.length; i++) {
+        proImg.push(tabCont[i].getElementsByTagName('img'));
+        proTit.push(tabCont[i].getElementsByTagName('p'));
+    };
+    for (var i=0; i<proTit.length; i++) {
+        for (var j=0; j<proTit[i].length; j++) {
+            proTit[i][j].tab = i;
+            proTit[i][j].index = j;
+            proTit[i][j].onclick = function() {
+                switchTab(this,proImg[this.tab],proTit[this.tab]);
+            };
+        };
+    };
+    function switchTab(obj,wrap,pobj) {
+        for (var i=0; i<wrap.length; i++) {
+            wrap[i].style.display = 'none';
+            pobj[i].className = '';
+        };
+        wrap[obj.index].style.display = 'block';
+        obj.className = 'active';
+    };
+</script>
+</body>
+</html>

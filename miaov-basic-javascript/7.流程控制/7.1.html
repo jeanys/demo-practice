@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>百度文库评分</title>
+    <style>
+        body,ul{margin: 0; padding: 0}
+        ul{list-style: none}
+        .score{width: 200px; margin: 50px auto; padding: 10px; font: normal 14px Arial,"Microsoft Yahei";}
+        .score li{float: left; margin: 0 2px; width: 19px; height: 20px; background: url("images/star.png") no-repeat right; text-indent: -99em; cursor: pointer}
+        .score li.active{background-position: left}
+        .score span{color: #F8800D; line-height: 20px; margin-left: 10px}
+    </style>
+</head>
+
+<body>
+<ul class="score" id="score">
+    <li>一星</li>
+    <li>二星</li>
+    <li>三星</li>
+    <li>四星</li>
+    <li>五星</li>
+    <span></span>
+</ul>
+
+<script>
+    var score = document.getElementById('score');
+    var stars = score.getElementsByTagName('li');
+    var text = ['很差','较差','还行','推荐','力荐'];
+    var span = score.getElementsByTagName('span')[0];
+    var noedit = 0;
+    var num = -1;
+    for (var i=0; i<stars.length; i++) {
+        stars[i].index = i;
+        stars[i].onmouseover = function() {
+            star(this.index);
+        };
+        stars[i].onmouseout = function() {
+            for (var i=0; i<stars.length; i++) {
+                if (i>num) {
+                    stars[i].className = '';
+                } else {
+                    stars[i].className = 'active';
+                };
+            };
+            if (noedit == 0) {
+                span.innerHTML = '';
+            } else {
+                span.innerHTML = text[num];
+            };
+        };
+        stars[i].onclick = function() {
+            star(this.index);
+            num = this.index;
+            noedit = 1;
+        };
+    };
+    function star(index) {
+        for (var i=0; i<stars.length; i++) {
+            stars[i].className = '';
+        };
+        for (var j=0; j<=index; j++) {
+            stars[j].className = 'active';
+        };
+        span.innerHTML = text[index];
+    };
+</script>
+</body>
+</html>

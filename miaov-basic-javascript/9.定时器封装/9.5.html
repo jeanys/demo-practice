@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>新浪数码频道选项卡</title>
+    <style>
+        body,ul,p{margin: 0; padding: 0; color: #666}
+        ul{list-style: none}
+        a{color: #666; text-decoration: none}
+        img{max-width: 100%}
+        .clearfix:after{content: ""; display: block; height: 0; font-size: 0; clear: both; visibility: hidden}
+
+        .slide-box{margin: 100px auto; width: 600px; font-size: 12px}
+        .slide-tit li{float: left; margin: 0 10px -1px 0; width: 100px; border-radius: 3px 3px 0 0; border: 1px solid #ddd; border-bottom: none; background: #fff; text-align: center; line-height: 30px}
+        .slide-tit li a{display: block}
+        .slide-tit li.active a{color: deepskyblue}
+
+        .slide-item{display: none; width: 580px; overflow: hidden; position: relative}
+        .slide-item.active{display: block}
+        .slide-main{border: 1px solid #ddd; padding: 10px}
+        .slide-main ul{position: absolute; left: 0; width: 999px}
+        .slide-main li{float: left; margin-right: 5px; width: 178px; padding: 5px 5px 0; border: 1px solid #eee; text-align: center; line-height: 2}
+        .slide-main img{display: block; width: 178px; height: 96px}
+        .slide-main .page{clear: both; text-align: center; margin-top: 137px}
+        .page span{display: inline-block; width: 10px; height: 10px; margin: 0 2px; background: #ddd; border-radius: 10px; cursor: pointer}
+        .page span.active{background: #999}
+    </style>
+</head>
+
+<body>
+<div class="slide-box" id="slide">
+    <div class="slide-tit" id="slideTab">
+        <ul class="clearfix">
+            <li class="active"><a href="#">选项卡1</a></li>
+            <li><a href="#">选项卡2</a></li>
+        </ul>
+    </div>
+    <div class="slide-main" id="slideImg">
+        <div class="slide-item active">
+            <ul class="clearfix">
+                <li><img src="images/pro1.jpg" alt="图片1"/><span>图片1</span></li>
+                <li><img src="images/pro2.jpg" alt="图片2"/><span>图片2</span></li>
+                <li><img src="images/pro3.jpg" alt="图片3"/><span>图片3</span></li>
+                <li><img src="images/pro4.jpg" alt="图片4"/><span>图片4</span></li>
+                <li><img src="images/pro5.jpg" alt="图片5"/><span>图片5</span></li>
+            </ul>
+            <div class="page">
+                <span class="active"></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="slide-item">
+            <ul class="clearfix">
+                <li><img src="images/pro5.jpg" alt="图片1"/><span>图片1</span></li>
+                <li><img src="images/pro4.jpg" alt="图片2"/><span>图片2</span></li>
+                <li><img src="images/pro3.jpg" alt="图片3"/><span>图片3</span></li>
+                <li><img src="images/pro2.jpg" alt="图片4"/><span>图片4</span></li>
+                <li><img src="images/pro1.jpg" alt="图片5"/><span>图片5</span></li>
+            </ul>
+            <div class="page">
+                <span class="active"></span><span></span><span></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var tabBox = document.getElementById('slideTab');
+    var imgBox = document.getElementById('slideImg');
+    var tabLi = tabBox.getElementsByTagName('li');
+    var imgUl = imgBox.getElementsByTagName('ul');
+    var liWidth = imgUl[0].getElementsByTagName('li')[0].offsetWidth+5;
+    var ulWidth = [];
+    var flipNum = 1;
+    var page = [];
+    var pageItem = [];
+
+    window.onload = function() {
+        for (var i=0; i<tabLi.length; i++) {
+            tabLi[i].index = i;
+            tabLi[i].onclick = function() {
+                this.pObj = imgUl[this.index].parentNode;
+                for (var i=0; i<imgUl.length; i++) {
+                    rmvClass(imgUl[i].parentNode,'active');
+                    rmvClass(tabLi[i],'active');
+                };
+                this.pObj.className = this.pObj.className + ' active';
+                this.className = 'active';
+            };
+        };
+
+        for (var i=0; i<imgUl.length; i++) {
+            var imgLi = imgUl[i].getElementsByTagName('li');
+            ulWidth.push(liWidth*imgLi.length);
+            imgUl[i].style.width = ulWidth[i]+'px';
+            page.push(imgUl[i].nextSibling.nextSibling);
+            pageItem[i] = page[i].getElementsByTagName('span');
+        };
+
+        for (var i=0; i<imgUl.length; i++) {
+            for (var j=0; j<pageItem[i].length; j++) {
+                pageItem[i][j].uindex = i;
+                pageItem[i][j].index = j;
+                pageItem[i][j].onclick = function() {
+                    doMove(imgUl[this.uindex],'left',20,10,-liWidth*flipNum*this.index);
+                    for (var i=0; i<pageItem[this.uindex].length; i++) {
+                        rmvClass(pageItem[this.uindex][i],'active');
+                    };
+                    this.className = 'active';
+                };
+            };
+        };
+    };
+
+    function rmvClass(obj,cname) {
+        obj.className = obj.className.replace(cname,'');
+    };
+
+    function doMove(obj,direc,speed,dist,endSpot,endFn) {
+        clearInterval(obj.timer);
+        endSpot = parseInt(endSpot);
+        var startSpot = parseInt(getStyle(obj,direc));
+        if (startSpot === endSpot) return;
+        obj.timer = setInterval(function(){
+            var nowSpot = parseInt(getStyle(obj,direc));
+            var nextSpot = nowSpot < endSpot ? nowSpot+dist : nowSpot-dist;
+            if ((startSpot < endSpot && nextSpot >= endSpot) || (startSpot > endSpot && nextSpot <= endSpot)) {
+                obj.style[direc] = endSpot +'px';
+                clearInterval(obj.timer);
+                endFn && endFn();
+                return;
+            }
+            obj.style[direc] = nextSpot +'px';
+        },speed)
+    };
+    function getStyle(obj,attr) {
+        return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj)[attr];
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>上下飘落方块动画</title>
+    <style>
+        body{margin: 0; padding: 0}
+        ul{list-style: none; padding: 0; margin: 0; height: 800px; cursor: pointer}
+        .list{position: relative}
+        .list li{width: 50px; height: 50px; background: deepskyblue; position: absolute; top: 0}
+    </style>
+</head>
+
+<body>
+<ul id="list" class="list"></ul>
+
+<script>
+    var list = document.getElementById('list');
+    var li = list.getElementsByTagName('li');
+    var html = '';
+    var num = -1;
+    var boxHeight = 50;
+    var wrapHeight = 800 - boxHeight;
+    var mode = 0;
+    var timer = null;
+    var ended = true;
+
+    for (var i=0; i<20; i++){
+        html += '<li style="left:'+i*60+'px"></li>';
+    };
+    list.innerHTML = html;
+    list.onclick = function() {
+        if (!ended) return;
+        timer = setInterval(function(){
+            ended = false;
+            if (mode === 0) {
+                var spot = wrapHeight;
+                var count = li.length-1;
+                num ++;
+            } else {
+                var spot = 0;
+                var count = 0;
+                num --;
+            };
+            doMove(li[num],'top',1,5,spot,function(){
+                if (parseInt(getStyle(li[count],'top')) == spot) ended = true;
+            });
+            if (num === count) {
+                clearInterval(timer);
+                if (mode === 0) {
+                    mode = 1;
+                    num ++;
+                } else {
+                    mode = 0;
+                    num --;
+                };
+            };
+        },100)
+    };
+
+    function doMove(obj,direc,speed,dist,endSpot,endFn) {
+        var timer = setInterval(function(){
+            var nowSpot = parseInt(getStyle(obj,direc));
+            var nextSpot = nowSpot < endSpot ? nowSpot+dist : nowSpot-dist;
+            if (nextSpot < endSpot) {
+                if (nextSpot >= endSpot) clearInterval(timer);
+            } else {
+                if (nextSpot <= endSpot) clearInterval(timer);
+            };
+            obj.style[direc] = nextSpot +'px';
+            endFn && endFn();
+        },speed)
+    };
+    function getStyle(obj,attr) {
+        return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj)[attr];
+    };
+</script>
+</body>
+</html>

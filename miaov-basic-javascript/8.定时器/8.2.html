@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>自动轮换选项卡</title>
+    <style>
+        body,ul,li{margin: 0; padding: 0}
+        body{font: normal 14px Arial,"Microsoft Yahei"; color: #333}
+        li{list-style: none}
+        a{color: #333; text-decoration: none}
+        .tab{width: 300px; margin: 100px auto; padding: 10px}
+        .tab-head{border-bottom: 1px solid #fff}
+        .tab-head:before,.tab-head:after{content: ""; display: block; height: 0; font-size: 0; clear: both; visibility: hidden}
+        .tab-head li{float: left; width: 149px; text-align: center; background: #eee; line-height: 30px; border-right: 1px solid #fff}
+        .tab-head li:last-child{width: 150px; border-right: 0}
+        .tab-head li a{color: #666 ; display: block}
+        .tab-head li.active{background: deepskyblue}
+        .tab-head li.active a{color: #fff}
+        .tab-main li{overflow: hidden; }
+        .tab-main li .img{float: left; height: 120px; width: 150px; text-align: center}
+        .tab-main li .img img{height: 120px}
+        .tab-main li .text{float: left; width: 150px}
+        .tab-main li .text p{margin: 0; line-height: 39px; background: #f8f8f8; border-bottom: 1px solid #fff; padding: 0 10px}
+        .tab-main li .text p.active{background: lightblue; color: #fff}
+    </style>
+</head>
+
+<body>
+<div class="tab">
+    <ul class="tab-head" id="tit">
+        <li class="active"><a href="javascript:;">MUJI 衣服</a></li>
+        <li><a href="javascript:;">MUJI 生活</a></li>
+    </ul>
+    <ul class="tab-main" id="tab">
+        <li>
+            <div class="img"><img src="images/1.jpg" alt="缩略图"/></div>
+            <div class="text">
+                <p class="active">印度棉束腰长上衣</p>
+                <p>女士棉运动鞋</p>
+                <p>直角运动袜带耳花纹</p>
+            </div>
+        </li>
+        <li style="display:none">
+            <div class="img"><img src="images/4.jpg" alt="缩略图"/></div>
+            <div class="text">
+                <p class="active">腈纶毛毯 浅米色</p>
+                <p>香 白檀 15支装</p>
+                <p>金合欢 木制钵</p>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<script>
+    var tab = document.getElementById('tab');
+    var tabli = tab.getElementsByTagName('li');
+    var tit = document.getElementById('tit');
+    var titli = tit.getElementsByTagName('li');
+    var img = tab.getElementsByTagName('img');
+    var imglist = [['images/1.jpg','images/2.jpg','images/3.jpg'],['images/4.jpg','images/5.jpg','images/6.jpg']];
+    var p = [];
+    var num = 0;
+    var tabindex = 0;
+    function change() {
+        for (var i = 0; i < tabli.length; i++) {
+            p[i] = tabli[i].getElementsByTagName('p');
+        };
+        num++;
+        p[tabindex][num-1].className = '';
+        if (num >= p[tabindex].length) {
+            num = 0;
+        };
+        p[tabindex][num].className = 'active';
+        img[tabindex].src = imglist[tabindex][num];
+    };
+    var timer = setInterval(change,1000);
+    for (var i = 0; i < titli.length; i++) {
+        titli[i].index = i;
+        titli[i].onclick = function() {
+            tabindex = this.index;
+            for (var i = 0; i < tabli.length; i++) {
+                tabli[i].style.display = 'none';
+                titli[i].className = '';
+            };
+            tabli[tabindex].style.display = 'block';
+            this.className = 'active';
+            num = 0;
+            for (var i = 0; i < p[tabindex].length; i++) {
+                p[tabindex][i].className = '';
+                p[tabindex][0].className = 'active';
+            };
+        };
+    };
+</script>
+</body>
+</html>

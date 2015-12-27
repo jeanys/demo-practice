@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>倒序商品广告效果</title>
+    <style>
+        body,ul{margin: 0; padding: 0}
+        ul{list-style: none}
+        body{font: normal 14px Arial,"Microsoft Yahei"; color: #333}
+        a{color: #333; text-decoration: none}
+        .shops{border: 1px solid #EEE; width: 340px; height: 197px; margin: 100px auto}
+        .img-name{position: relative}
+        .img-name li{border: 1px solid #DDE7ED; background: #f8f8f8; width: 60px; text-align: center; line-height: 25px; margin: 5px}
+        .img-name li a{color: #9AA9BE; display: block}
+        .img-name li.active{background: #5578A9}
+        .img-name li.active a{color: #fff}
+        .img-name .pos-left{position: absolute; left: 0; top: 0}
+        .img-name .pos-right{position: absolute; right: 0; top: 0}
+        .img-list li{margin: 0 70px; display: none}
+        .img-list li.active{display: block}
+        .img-list img{width: 200px; height: 197px; display: block}
+    </style>
+</head>
+
+<body>
+<div class="shops" id="wrap">
+    <ul class="img-name" id="imgName">
+        <div class="pos-left">
+            <li class="active"><a href="#">长袖</a></li>
+            <li><a href="#">运动鞋</a></li>
+            <li><a href="#">运动袜</a></li>
+            <li><a href="#">毛毯</a></li>
+            <li><a href="#">香氛</a></li>
+            <li><a href="#">食器</a></li>
+        </div>
+        <div class="pos-right">
+            <li><a href="#">短裤</a></li>
+            <li><a href="#">长裤</a></li>
+            <li><a href="#">披肩</a></li>
+            <li><a href="#">开衫</a></li>
+            <li><a href="#">童装</a></li>
+            <li><a href="#">帽子</a></li>
+        </div>
+    </ul>
+    <ul class="img-list" id="imgList">
+        <li class="active"><a href="#"><img src="images/1.jpg" alt="长袖"/></a></li>
+        <li><a href="#"><img src="images/2.jpg" alt="运动鞋"/></a></li>
+        <li><a href="#"><img src="images/3.jpg" alt="运动袜"/></a></li>
+        <li><a href="#"><img src="images/4.jpg" alt="毛毯"/></a></li>
+        <li><a href="#"><img src="images/5.jpg" alt="香氛"/></a></li>
+        <li><a href="#"><img src="images/6.jpg" alt="食器"/></a></li>
+        <li><a href="#"><img src="images/7.jpg" alt="短裤"/></a></li>
+        <li><a href="#"><img src="images/8.jpg" alt="长裤"/></a></li>
+        <li><a href="#"><img src="images/9.jpg" alt="披肩"/></a></li>
+        <li><a href="#"><img src="images/10.jpg" alt="开衫"/></a></li>
+        <li><a href="#"><img src="images/11.jpg" alt="童装"/></a></li>
+        <li><a href="#"><img src="images/12.jpg" alt="帽子"/></a></li>
+    </ul>
+</div>
+
+<script>
+    var div = document.getElementById('wrap');
+    var imgName = document.getElementById('imgName');
+    var imgList = document.getElementById('imgList');
+    var nameLi = imgName.getElementsByTagName('li');
+    var listLi = imgList.getElementsByTagName('li');
+    var num = 0;
+    var mode = 0;
+    for (var i=0; i<nameLi.length; i++) {
+        nameLi[i].index = i;
+        nameLi[i].onmouseover = function() {
+            for (var i=0; i<listLi.length; i++) {
+                listLi[i].className = '';
+                nameLi[i].className = '';
+            };
+            if (listLi[this.index]) {
+                listLi[this.index].className = 'active';
+                nameLi[this.index].className = 'active';
+            };
+            num = this.index;
+            clearInterval(timer);
+        };
+    };
+    div.onmouseout = function(event) {
+        var obj = event.toElement || event.relatedTarget;
+        if(this.contains(obj)) return false;
+        timer = setInterval(change,1000);
+    };
+    var timer = setInterval(change,1000);
+    function change() {
+        if (num < listLi.length-1 && mode == 0) {
+            num ++;
+        } else {
+            num --;
+        };
+        if (num == 11) {
+            mode = 1;
+        } else if (num == 0) {
+            mode = 0;
+        };
+        if (listLi[num]) {
+            for (var i=0; i<listLi.length; i++) {
+                listLi[i].className = '';
+                nameLi[i].className = '';
+            };
+            listLi[num].className = 'active';
+            nameLi[num].className = 'active';
+        };
+    };
+</script>
+</body>
+</html>

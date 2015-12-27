@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="UTF-8">
+    <title>随机图片滚动</title>
+    <style>
+        body,ul,li,p{margin: 0; padding: 0}
+        ul{list-style: none}
+        body{font: normal 14px Arial,"SimHei","Microsoft Yahei"; color: #3a3a3a}
+        a{color: #3a3a3a}
+        .site-list{overflow: hidden; width: 620px; margin: 100px auto; padding: 30px 30px 20px; background: #505054; border: 1px solid #3a3a3a; box-sizing: content-box}
+        .site-list li{position: relative; overflow: hidden; float: left; width: 200px; height: 117px; margin: 0 10px 10px 0; border-radius: 3px; box-shadow: 0 0 5px rgba(0,0,0,0.1)}
+        .site-list li:nth-child(3n){margin-right: 0}
+        .site-name{position: absolute; top: 0; width: 100%; height: 100%; line-height: 117px; background: #f3f3f3; border-radius: 3px; font-size: 40px; text-align: center; color: #686E74}
+        .site-img{position: absolute; top: 117px}
+        .site-list li img{width: 100%; display: block}
+    </style>
+</head>
+
+<body>
+<ul class="site-list" id="list">
+    <li>
+        <span class="site-name">Google</span>
+        <span class="site-img"><img src="images/site-google.png" alt="Google"/></span>
+    </li>
+    <li>
+        <span class="site-name">百度</span>
+        <span class="site-img"><img src="images/site-baidu.png" alt="百度"/></span>
+    </li>
+    <li>
+        <span class="site-name">微博</span>
+        <span class="site-img"><img src="images/site-weibo.png" alt="微博"/></span>
+    </li>
+    <li>
+        <span class="site-name">知乎</span>
+        <span class="site-img"><img src="images/site-zhihu.png" alt="知乎"/></span>
+    </li>
+    <li>
+        <span class="site-name">W3Cfuns</span>
+        <span class="site-img"><img src="images/site-w3cfuns.png" alt="W3Cfuns"/></span>
+    </li>
+    <li>
+        <span class="site-name">W3School</span>
+        <span class="site-img"><img src="images/site-w3school.png" alt="W3School"/></span>
+    </li>
+    <li>
+        <span class="site-name">网易</span>
+        <span class="site-img"><img src="images/site-netease.png" alt="网易"/></span>
+    </li>
+    <li>
+        <span class="site-name">站酷</span>
+        <span class="site-img"><img src="images/site-zcool.png" alt="站酷"/></span>
+    </li>
+    <li>
+        <span class="site-name">豆瓣</span>
+        <span class="site-img"><img src="images/site-douban.png" alt="豆瓣"/></span>
+    </li>
+</ul>
+
+<script>
+    var list = document.getElementById('list');
+    var item = list.getElementsByTagName('li');
+
+    var timer = setInterval(function(){
+        scroll(item[Math.floor(Math.random()*item.length)]);
+    },500);
+
+    function scroll(obj) {
+        var span = obj.getElementsByTagName('span');
+        var high = parseInt(getStyle(span[0],'height'));
+        var spot = parseInt(getStyle(span[0],'top')) == 0 ? -high : 0;
+        doMove(span[0],'top',10,10,spot);
+        doMove(span[1],'top',10,10,spot+high);
+    };
+    function doMove(obj,direc,speed,dist,endSpot,endFn) {
+        clearInterval(obj.timer);
+        endSpot = parseInt(endSpot);
+        var startSpot = parseInt(getStyle(obj,direc));
+        if (startSpot === endSpot) return;
+        obj.timer = setInterval(function(){
+            var nowSpot = parseInt(getStyle(obj,direc));
+            var nextSpot = nowSpot < endSpot ? nowSpot+dist : nowSpot-dist;
+            if ((startSpot < endSpot && nextSpot >= endSpot) || (startSpot > endSpot && nextSpot <= endSpot)) {
+                obj.style[direc] = endSpot +'px';
+                clearInterval(obj.timer);
+                endFn && endFn();
+                return;
+            }
+            obj.style[direc] = nextSpot +'px';
+        },speed)
+    };
+    function getStyle(obj,attr) {
+        return obj.currentStyle ? obj.currentStyle[attr] : getComputedStyle(obj)[attr];
+    };
+</script>
+</body>
+</html>
