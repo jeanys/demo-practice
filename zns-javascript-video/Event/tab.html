@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>tab-demo</title>
+<style type="text/css">
+body,ul,li,h2,p { margin: 0; padding: 0; font-size: 12px; }
+li { list-style: none; }
+#container { width :500px; border: 1px solid #DBE6EE; margin: 50px auto; }
+#tab { overflow: hidden; *zoom: 1; background: #F5F5F5; border-bottom: 1px solid #DBE6EE; }
+#tab li { float: left; height: 30px; line-height:30px; }
+#tab a { display: block; padding: 0 25px; color: #039; text-decoration: none; }
+#tab a:hover { color: #06C; background: #DBE6EE; }
+#content { padding: 10px 15px; }
+#content h2 { margin: 10px 0; }
+#content p { line-height: 24px; }
+#content div { display: none; }
+</style>
+<script type="text/javascript">
+window.onload = function() {
+	var oTab = document.getElementById('tab');
+	var oContent = document.getElementById('content');
+	var aLi = oTab.getElementsByTagName('li');
+	var aDiv = oContent.getElementsByTagName('div');
+	aDiv[0].style.display = 'block';
+	for(var i=0;i<aLi.length;i++) {
+		aLi[i].index = i;
+		aLi[i].onmouseover = function() {
+			for(var i=0;i<aDiv.length;i++) {
+				aDiv[i].style.display = 'none';
+			}
+			aDiv[this.index].style.display = 'block';
+		}
+	}
+}
+</script>
+</head>
+<body>
+<div id="container">
+	<div id="tab">
+		<ul>
+			<li><a href="javascript:" title="新闻">新闻</a></li>
+			<li><a href="javascript:" title="科技">科技</a></li>
+			<li><a href="javascript:" title="手机">手机</a></li>
+			<li><a href="javascript:" title="数码">数码</a></li>
+			<li><a href="javascript:" title="博客">博客</a></li>
+			<li><a href="javascript:" title="游戏">游戏</a></li>
+		</ul> 
+	</div>
+	<div id="content">
+		<div>
+			<h2>厦门公交案8名下落不明考生7人确认遇难</h2>
+			<p>1人仍在比对DNA 15名危重症伤员病情危重 病情随时可能发生变化</p>
+			<p>官方:曾多次为嫌犯办理低保 最高每月发840元 取消因其收入超标</p>
+		</div>
+		<div>
+			<h2>2013苹果WWDC大会凌晨开幕：惊喜盘点</h2>
+			<p>【视频】iOS 7 | iRadio | 新款Macbook Air | iPad 5</p>
+			<p>WWDC大会门票1599美元一张 2分钟售罄 | 为没买到门票果粉发布视频</p>
+		</div>
+		<div>
+			<h2>6英寸三星Note3原型偷跑 与S4很不同</h2>
+			<p>高考结束端午将至 热门降价手机排行 端午假期出游 这些手机配件值得购买</p>
+			<p>热门手机屏幕清晰度排行 ppi才是王道 可换电池四核强机推荐 移动电源不实用</p>
+		</div>
+		<div>
+			<h2>英特尔NUC公布:无风扇迷你PC主宰未来</h2>
+			<p>单反微单何去何 苹果越狱是否 空气净化器热销背后</p>
+			<p>MWC看平板新趋势 Kindle入华着眼未来</p>
+		</div>
+		<div>
+			<h2>独家策划：慢生活之和粽子有关的二三事</h2>
+			<p>别浪费时间，在办公室里也能消灭啤酒肚</p>
+			<p>猫猫明天就要去新家了 我不是老鼠我是粽子</p>
+		</div>
+		<div>
+			<h2>不只是单机 2013年E3参展网游全知道</h2>
+			<p>武侠网游十年同一梗 我们和梦幻的初恋那些事</p>
+			<p>IOS手游《王国保卫战：前线》：近满分神作</p>
+		</div>
+	</div>
+</div>
+</body>
+</html>

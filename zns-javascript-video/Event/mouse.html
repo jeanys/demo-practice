@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>HTML-DOM</title>
+<style type="text/css">
+div { width: 300px; height: 300px; background: #390; border: 1px solid #000; float: left; margin: 10px; padding: 20px; font: 50px/1.2 "Courier New"; color: #fff; cursor: pointer; }
+</style>
+<script type="text/javascript">
+function clickMEEvent(obj) {
+	switch (obj.innerHTML) {
+	case 'Please click': obj.innerHTML = 'Please click again'; break;
+	case 'Please click again': obj.innerHTML = obj.innerHTML + '<br />once more...'; break;
+	case 'Thank you': obj.innerHTML = 'Goodbye'; break;
+	case 'Goodbye': obj.parentNode.removeChild(obj); break;
+	default: obj.innerHTML = 'Thank you';
+	}
+}
+</script>
+</head>
+<body>
+<div onmouseover="this.innerHTML = 'Thank you'" onmouseout="this.innerHTML = 'Please move in'" style="font-size:80px;">Please move in</div>
+<div onclick="clickMEEvent(this)">Please click</div>
+</body>
+</html>

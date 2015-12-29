@@ -1,0 +1,329 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>无标题文档</title>
+<style type="text/css">
+div,body,ul,li{
+	margin:0px;
+	padding:0px;
+}
+body{padding:10px;}
+#containet{
+	width:100%;
+	border:1px solid #666;
+}
+.div_box{
+	width:89px;
+	height:89px;
+	border:2px dashed #CCC;
+	float:left;
+	margin:10px;
+	display:inline;
+	background:#000;
+	padding:5px;
+	line-height:20px;
+	font-size:12px;
+	color:#fff;
+}
+#containet .yellow{
+	background:#FF0;
+	color:#000;
+}
+#containet .clone{
+	background:#393;
+	color:#fff;
+}
+.div_box span{font-weight:bold;color:#FF0;}
+.clearfix:after { 
+content: "."; 
+display: block; 
+height: 0; 
+clear: both; 
+visibility: hidden; 
+} 
+.clearfix {display: inline-table;} 
+/* Hides from IE-mac */ 
+* html .clearfix {height: 1%;} 
+.clearfix {display: block;} 
+/* End hide from IE-mac */ 
+</style>
+<script>
+function $(obj){
+	
+	var obj = document.getElementById(obj);
+	
+	return obj;
+}
+window.onload = function(){
+	
+	var oDivBox = $("containet");
+	
+	var aDiv = oDivBox.getElementsByTagName("div");
+	
+	//添加
+	var oAddInput = $("add_input");
+	
+	var oAddValInpuy = $("add_val_input");
+	
+	var oAddVal = $("add_number");
+	
+	//删除
+	var oRemoveFirst = $("remove_first");
+	
+	var oRemoveLast = $("remove_last");
+	
+	var oRemoveValInput = $("remove_val");
+	
+	var oRemVal = $("rem_number");
+	
+	//复制
+	var oCloneBtn = $("clone_btn");
+	
+	var oCloneVal = $("clone_number");
+	
+	//属性
+	var oGetAttrBtn = $("getattr_btn");
+	
+	var oGetVal = $("get_number");
+	
+	var aDivLen = oDivBox.getElementsByTagName("div");
+	
+	var i = 0;
+	
+	//添加DIV
+	oAddInput.onclick = function(){
+		
+		i++;
+		
+		var oCreateDiv = document.createElement("div");
+		
+		oCreateDiv.className = "div_box";
+		
+		oCreateDiv.title = "这是插入的第"+ i +"一个DIV";
+		
+		oCreateDiv.innerHTML = "这是插入的第<span>"+ i +"</span>一个DIV";
+		
+		oDivBox.appendChild(oCreateDiv);
+		
+	};
+	
+	//指定位置添加DIV
+	oAddValInpuy.onclick = function(){
+		
+		var iNum = oAddVal.value;
+		
+		var oCreateDiv = document.createElement("div");
+		
+		oCreateDiv.className = "div_box yellow";
+		
+		oCreateDiv.title = "这是指定添加的DIV，指定的位置是"+iNum;
+		
+		oCreateDiv.innerHTML = "这是指定添加的DIV，指定的位置是"+iNum;
+		
+		if(iNum == ""){
+			
+			alert("您没有输入的是空值，请重新输入！！！");
+			
+			return false;
+			
+		}else if(iNum == 0){
+			
+			alert("不能输入-- 0 -- 哦！！！");
+			
+			return false;
+			
+		}else{
+			iNum = iNum - 1;
+			
+			if(iNum > aDiv.length){
+				
+				alert("您输入的数值不能比添加的DIV个数大哦，请重新输入！！！");
+			
+				return false;
+			
+			}else if(aDiv.length == 0){
+				
+				oDivBox.appendChild(oCreateDiv);
+				
+			}else{
+				
+				oDivBox.insertBefore(oCreateDiv,aDiv[iNum]);
+				
+			}
+		}
+	}
+	
+	//删除第一个DIV
+	oRemoveFirst.onclick = function(){
+		
+		if(oDivBox.firstChild){
+			oDivBox.removeChild(oDivBox.firstChild);  //IE
+		}else{
+			oDivBox.removeChild(oDivBox.firstElementChild);   //FF
+		}
+		
+		
+	};
+	
+	//删除最后一个DIV
+	oRemoveLast.onclick = function(){
+		if(oDivBox.firstChild){
+			oDivBox.removeChild(oDivBox.lastChild);  //IE
+		}else{
+			oDivBox.removeChild(oDivBox.lastElementChild);   //FF
+		}
+		
+	};
+	
+	//删除指定的DIV
+	oRemoveValInput.onclick = function(){
+		
+		var iNum = oRemVal.value;
+
+		if(iNum == ""){
+			
+			alert("您没有输入正确的数值哦！！！");
+			
+			return false;
+			
+		}else if(iNum == 0){
+			
+			alert("不能输入-- 0 -- 哦！！！");
+			
+			return false;
+			
+		}else{
+			
+			iNum = iNum - 1;
+			
+			if(aDiv.length == 0){
+				
+				alert("DIV已经被你删光了！！！");
+				
+				return false;
+				
+			}else{
+				
+				if(oDivBox.firstChild){
+					oDivBox.removeChild(aDiv[iNum]);  //IE
+				}else{
+					oDivBox.removeChild(aDiv[iNum]);   //FF
+				}
+				
+			}
+		}
+		
+	};
+	
+	//复制节点
+	oCloneBtn.onclick = function(){
+		
+		var iNum = oCloneVal.value;
+	
+		if(iNum == ""){
+			
+			alert("您没有输入的是空值，请重新输入！！！");
+			
+			return false;
+			
+		}else if(iNum == 0){
+			
+			alert("不能输入-- 0 -- 哦！！！");
+			
+			return false;
+			
+		}else{
+			
+			iNum = iNum - 1;
+			
+			if(aDiv.length == 0){
+				
+				alert("没有DIV可以复制！！！");
+				
+				return false;
+				
+			}else{
+				
+				var oCloneDiv = aDiv[iNum].cloneNode(true);
+				
+				alert("你复制的是第"+ (iNum + 1) +"个DIV，并会被添加到最后面");
+				
+				oCloneDiv.className = "div_box clone";
+				
+				oCloneDiv.innerHTML = "这是指定复制的DIV，你复制的是第"+ (iNum + 1) +"个DIV";
+				
+				oDivBox.appendChild(oCloneDiv);
+				
+			}
+		}
+		
+	};
+	
+	//获取属性
+	oGetAttrBtn.onclick = function(){
+		
+		var iNum = oGetVal.value;
+		
+		if(iNum == ""){
+			
+			alert("您没有输入的是空值，请重新输入！！！");
+			
+			return false;
+			
+		}else if(iNum == 0){
+			
+			alert("不能输入-- 0 -- 哦！！！");
+			
+			return false;
+			
+		}else{
+			
+			iNum = iNum - 1;
+			
+			if(aDiv.length == 0){
+				
+				alert("没有DIV的属性可以获取！！！");
+				
+				return false;
+				
+			}else{
+				
+				var oGetDiv = aDiv[iNum].getAttribute("title");
+				
+				alert("你获取了第"+(iNum+1)+"个DIV的属性title，这个DIV的属性是--"+oGetDiv+"--");
+				
+			}
+		}
+	};
+	
+	
+};
+	
+	
+
+</script>
+</head>
+
+<body>
+<input id="add_input" type="button" value="插入DIV">
+<input id="add_val_input" type="button" value="指定位置插入DIV">
+<input type="text" id="add_number" value="" size="1">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input id="remove_first" type="button" value="删除第一个DIV">
+<input id="remove_last" type="button" value="删除最后一个DIV">
+<input id="remove_val" type="button" value="删除指定的DIV">
+<input type="text" id="rem_number" value="" size="1">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input id="clone_btn" type="button" value="复制指定的DIV">
+<input type="text" id="clone_number" value="" size="1"><br><br>
+<input id="getattr_btn" type="button" value="获取指定DIV的属性">
+<input type="text" id="get_number" value="" size="1">
+
+
+<div id="containet" class="clearfix">
+	
+
+</div>
+</body>
+</html>

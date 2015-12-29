@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>仿Flash图片轮换</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<script src="startMove.js"></script>
+<script src="getByClass.js"></script>
+<script>
+window.onload = function() {
+	var oDivPic = document.getElementById('playimages');
+	var oUlBig = getByClass(oDivPic,'big_pic')[0];
+	var oDivSmall = getByClass(oDivPic,'small_pic')[0];
+	
+	var oPrev = getByClass(oUlBig,'prev')[0];
+	var oNext = getByClass(oUlBig,'next')[0];
+	var oMarkLeft = getByClass(oUlBig,'mark_left')[0];
+	var oMarkRight = getByClass(oUlBig,'mark_right')[0];
+
+	var aLiBig = oUlBig.getElementsByTagName('li');
+	var aLiSmall = oDivSmall.getElementsByTagName('li');
+	var oUlSmall = oDivSmall.getElementsByTagName('ul')[0];
+	
+	//左右按钮
+	oPrev.onmouseover = oMarkLeft.onmouseover = function() {
+		startMove(oPrev,'opacity',100);
+	}
+	oPrev.onmouseout = oMarkLeft.onmouseout = function() {
+		startMove(oPrev,'opacity',0);
+	}
+	oNext.onmouseover = oMarkRight.onmouseover = function() {
+		startMove(oNext,'opacity',100);
+	}
+	oNext.onmouseout = oMarkRight.onmouseout = function() {
+		startMove(oNext,'opacity',0);
+	}
+	
+	//图片切换
+	var nowZIndex = 2;
+	var now = 0;
+	for(var i=0; i<aLiSmall.length; i++) {
+		aLiSmall[i].index = i;
+		aLiSmall[i].onclick = function() {
+			if(this.index == now) {return};
+			now = this.index;
+			switchPic();
+		}
+		aLiSmall[i].onmouseover = function() {
+			startMove(this,'opacity',100);
+		}
+		aLiSmall[i].onmouseout = function() {
+			if(this.index!=now) {startMove(this,'opacity',60);}
+		}
+	}
+	
+	//左右点击
+	oPrev.onclick = function() {
+		now--;
+		if(now == -1){now = aLiBig.length-1;}
+		switchPic();
+	}
+	oNext.onclick = function() {
+		now++;
+		if(now == aLiBig.length){now = 0;}
+		switchPic();
+	}
+	
+	//切换动作
+	function switchPic() {
+		aLiBig[now].style.zIndex = nowZIndex++;
+		aLiBig[now].style.height = 0;
+		startMove(aLiBig[now],'height',320);
+		for(var i=0; i<aLiSmall.length; i++) {
+			startMove(aLiSmall[i],'opacity',60);
+		}
+		startMove(aLiSmall[now],'opacity',100);
+		oUlSmall.style.width = aLiSmall.length * aLiSmall[0].offsetWidth + 'px';
+		if(now == 0) {
+			startMove(oUlSmall,'left',0);
+		} else if (now == aLiBig.length-1) {
+			startMove(oUlSmall,'left',-(now-2)*aLiSmall[0].offsetWidth);
+		} else {
+			startMove(oUlSmall,'left',-(now-1)*aLiSmall[0].offsetWidth);
+		}
+	}
+	
+	//自动播放
+	var timer = setInterval(oNext.onclick, 3000);
+	oDivPic.onmouseover = function() {
+		clearInterval(timer);
+	}
+	oDivPic.onmouseout = function() {
+		timer = setInterval(oNext.onclick, 3000);
+	}
+}
+</script>
+</head>
+
+<body>
+<div id="playimages" class="play">
+    <ul class="big_pic">
+		<div class="prev"></div>
+		<div class="next"></div>
+		<div class="text">加载图片说明……</div>
+		<div class="length">计算图片数量……</div>
+		<a class="mark_left" href="javascript:;"></a>
+		<a class="mark_right" href="javascript:;"></a>
+		<div class="bg"></div>
+        <li style="z-index:1;"><img src="images/1.jpg" /></li>
+        <li><img src="images/2.jpg" /></li>
+        <li><img src="images/3.jpg" /></li>
+        <li><img src="images/4.jpg" /></li>
+        <li><img src="images/5.jpg" /></li>
+        <li><img src="images/6.jpg" /></li>
+    </ul>
+    <div class="small_pic">
+        <ul style="width:390px;">
+            <li style="filter: 100; opacity: 1;"><img src="images/1.jpg" /></li>
+            <li><img src="images/2.jpg" /></li>
+            <li><img src="images/3.jpg" /></li>
+            <li><img src="images/4.jpg" /></li>
+            <li><img src="images/5.jpg" /></li>
+            <li><img src="images/6.jpg" /></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

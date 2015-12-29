@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>拖拽-父级绝对定位</title>
+<style type="text/css">
+#drag { width:200px; height:200px; border:1px solid #CCC; background:#F2F2F2; position:absolute; cursor:move; }
+#wrapper { width:900px; height:600px; border:1px solid #666; background:#999; }
+</style>
+<script type="text/javascript">
+window.onload = function() {
+	var oDrag = document.getElementById('drag');
+	var oWrap = document.getElementById('wrapper');
+	var disX = 0;
+	var disY = 0;
+	oDrag.onmousedown = function(ev) {
+		var oEvent = ev || event;
+		disX = oEvent.clientX - oDrag.offsetLeft;
+		disY = oEvent.clientY - oDrag.offsetTop;
+		document.onmousemove = function(ev) {
+			var oEvent = ev || event;
+			var dragL = oEvent.clientX - disX; //oDrag的left坐标
+			var dragT =  oEvent.clientY - disY; //oDrag的top坐标
+			var wrapL = oWrap.offsetLeft; //父级oWrap的left坐标
+			var wrapT = oWrap.offsetTop; //父级oWrap的top坐标
+			if (dragL < wrapL) {
+				dragL = wrapL;
+			} else if ( dragL > (oWrap.offsetWidth + wrapL) - oDrag.offsetWidth) {
+				dragL = (oWrap.offsetWidth + wrapL) - oDrag.offsetWidth;
+			}
+			if (dragT < wrapT) {
+				dragT = wrapT;
+			} else if ( dragT > (oWrap.offsetHeight + wrapT) - oDrag.offsetHeight) {
+				dragT = (oWrap.offsetHeight + wrapT) - oDrag.offsetHeight;
+			}
+			oDrag.style.left = dragL + 'px';
+			oDrag.style.top = dragT + 'px';
+		}
+		document.onmouseup = function() {
+			document.onmousemove = null;
+			document.onmouseup = null;
+		}
+		return false; //FF bug
+	}
+}
+</script>
+</head>
+
+<body>
+<div id="wrapper">
+	<div id="drag"></div>
+</div>
+</body>
+</html>

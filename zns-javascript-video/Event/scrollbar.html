@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>scrollbar-demo</title>
+<style>
+#parent { width:20px; height:300px; background:#DDD; position:relative; float:left; }
+#drag { width:20px; height:80px; background:#AAA; position:absolute; top:0; left:0; }
+#set_size,#set_alpha,#set_scroll { width:300px; height:300px; float:left; margin:0 10px; } 
+#set_size { width:0; height:0; background:#C00; }
+#set_alpha { background:#C00; filter:alpha(opacity:0); opacity:0; }
+#set_scroll { font:12px/1.5 微软雅黑; position:relative; overflow:hidden; background:#F2F2F2; border:1px solid #CCC; }
+#set_scroll div { position:absolute; padding:0 10px; }
+</style>
+<script>
+window.onload = function() {
+	var oDrag = document.getElementById('drag');
+	var oParent = document.getElementById('parent');
+	var oSize = document.getElementById('set_size');
+	var oAlpha = document.getElementById('set_alpha');
+	var oScroll = document.getElementById('set_scroll');
+	var oSDiv = document.getElementById('set_scroll').getElementsByTagName('div')[0];
+	//var disX = 0; //垂直滚动条不需要水平移动
+	var disY = 0;
+	var scale = 0;
+	oDrag.onmousedown = function(ev) {
+		var oEvent = ev || event;
+		disY = oEvent.clientY - oDrag.offsetTop;
+		oDrag.style.backgroundColor = '#999';
+		document.onmousemove = function(ev) {
+			var oEvent = ev || event;
+			var t = oEvent.clientY - disY;
+			if(t<0) {
+				t = 0;
+			} else if(t > oParent.offsetHeight-oDrag.offsetHeight) {
+				t = oParent.offsetHeight-oDrag.offsetHeight;
+			}
+			oDrag.style.top = t + 'px';
+			//获取拉动滚动条时的位置比例
+			scale = (t / (oParent.offsetHeight-oDrag.offsetHeight)).toFixed(2);
+			oSize.style.width = 300 * scale + 'px';
+			oSize.style.height = 300 * scale + 'px';
+			oAlpha.style.filter = 'alpha:(opacity:'+ scale*100 +')';
+			oAlpha.style.opacity = scale;
+			oSDiv.style.top = scale * -(oSDiv.offsetHeight - oScroll.offsetHeight) + 'px';
+		}
+		document.onmouseup = function() {
+			oDrag.style.backgroundColor = '#AAA';
+			document.onmousemove = null;
+			document.onmouseup = null;
+		}
+		return false;
+	}
+}
+</script>
+</head>
+
+<body>
+<div id="parent">
+	<div id="drag"></div>
+</div>
+<div id="set_scroll">
+	<div>
+		<h1>关于书籍：</h1>
+		<p>HTML、CSS 类别书籍，都是大同小异，在当当网、卓越网搜索一下很多推荐。如果感觉学的差不多了，可以关注一下《CSS禅意花园》，这个很有影响力。Javascript 的书籍推荐看老外写的，国内很多 Javascript 书籍的作者对 Javascript 语言了解的都不是很透彻。</p>
+		<p>这里推荐几本 Javascript 书籍：</p>
+		<h2>初级读物：</h2>
+		<p>《JavaScript高级程序设计》：一本非常完整的经典入门书籍，被誉为JavaScript圣经之一，详解的非常详细，最新版第三版已经发布了，建议购买。</p>
+		<p>《JavaScript王者归来》：百度的一个Web开发项目经理写的，作为初学者准备的入门级教程也不错。</p>
+		<h2>中级读物：</h2>
+		<p>《JavaScript权威指南》：另外一本JavaScript圣经，讲解的也非常详细，属于中级读物，建议购买。</p>
+		<p>《JavaScript.The.Good.Parts》：Yahoo大牛，JavaScript精神领袖Douglas Crockford的大作，虽然才100多页，但是字字珠玑啊！强烈建议阅读。</p>
+		<p>《高性能JavaScript》：《JavaScript高级程序设计》作者Nicholas C. Zakas的又一大作。</p>
+		<p>《Eloquent JavaScript》：这本书才200多页，非常短小，通过几个非常经典的例子（艾米丽姨妈的猫、悲惨的隐士、模拟生态圈、推箱子游戏等等）来介绍JavaScript方方面面的知识和应用方法。</p>
+		<h2>高级读物：</h2>
+		<p>《JavaScript Patterns 》：书中介绍到了各种经典的模式，如构造函数、单例、工厂等等，值得学习。</p>
+		<p>《Pro.JavaScript.Design.Patterns》：Apress出版社讲解JavaScript设计模式的书，非常不错。</p>
+		<p>《Developing JavaScript Web Applications》：构建富应用的好书，针对MVC模式有较为深入的讲解，同时也对一些流程的库进行了讲解。</p>
+		<p>《Developing Large Web Applications》：不仅有JavaScript方面的介绍，还有CSS、HTML方面的介绍，但是介绍的内容却都非常不错，真正考虑到了一个大型的Web程序下，如何进行JavaScript架构设计，值得一读。</p>
+		<p>要做优秀的前端工程师，还需要继续努力：《高性能网站建设指南》、《Yahoo工程师的网站性能优化的建议》、&quot;YSLOW&quot;性能优化建议、《网站重构》、《Web开发敏捷之道》、&quot; jQuery 库&quot;、&quot;前端框架&quot;、&quot;HTML5&quot;、&quot;CSS3&quot;。。。这些都要深入研究！</p>
+	</div>
+</div>
+<div id="set_alpha"></div>
+<div id="set_size"></div>
+</body>
+</html>

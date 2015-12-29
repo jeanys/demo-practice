@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8" />
+<title>DOM操作div练习</title>
+<style type="text/css">
+body,input { font-size: 12px; }
+.clearfix { overflow: hidden; *zoom: 1; }
+.btnbar { border-bottom: 2px solid #666; padding: 5px; margin-bottom: 20px; }
+#container { border: 1px dashed #000; padding: 5px; *padding-bottom: 15px; }
+.div_box { width: 76px; height: 76px; background: #000; border: 2px dashed #ccc; color: #fff; float: left; padding: 10px; margin: 10px; display: inline; }
+.div_box strong { color: #f00; }
+</style>
+<script type="text/javascript">
+window.onload = function() {
+	conDiv = document.getElementById('container');
+	aDiv = document.getElementsByTagName('div'); //aDiv[0]是btnbar，aDiv[1]是container
+}
+//插入DIV
+function addDiv() {
+	var divBox = document.createElement('div');
+	divBox.className = 'div_box'; //divBox.setAttribute('class','div_box');
+	divBox.setAttribute('title','这是插入的第' + (aDiv.length - 1) + '个DIV');
+	divBox.innerHTML = ('这是插入的第<strong>' + (aDiv.length - 1) + '</strong>个DIV');
+	conDiv.appendChild(divBox);
+}
+//指定位置插入DIV
+function addDesDiv() {
+	var addNumber = document.getElementById('add_number');
+	if (addNumber.value == "") {
+		alert('没有输入指定值！')
+	} else if (addNumber.value > aDiv.length -1 || addNumber.value < 1) {
+		alert('此位置不能插入DIV！');
+	} else {
+		var divBox = document.createElement('div');
+		divBox.style.color = '#000';
+		divBox.style.backgroundColor = '#ff0';
+		divBox.className = 'div_box';
+		divBox.setAttribute('title','这是指定添加的DIV，指定的位置是' + (addNumber.value));
+		divBox.innerHTML = ('这是指定添加的DIV，指定的位置是<strong>' + (addNumber.value) + '</strong>');
+		conDiv.insertBefore(divBox,aDiv[Number(addNumber.value) + 1]); //插入在指定DIV之前
+	};
+}
+//删除第一个DIV
+function rmvFirstDiv() {
+	var firstDiv = conDiv.firstChild; //aDiv[2]
+	if (firstDiv == undefined) {
+		alert('没有DIV可以删除！');
+	} else {
+		conDiv.removeChild(firstDiv);
+	};
+}
+//删除最后一个DIV
+function rmvLastDiv() {
+	var lastDiv = conDiv.lastChild; //aDiv[aDiv.length - 1]
+	if (lastDiv == undefined) {
+		alert('没有DIV可以删除！');
+	} else {
+		conDiv.removeChild(lastDiv);
+	};
+}
+//删除指定的DIV
+function rmvDesDiv() {
+	var rmvNumber = document.getElementById('remove_number');
+	if (rmvNumber.value == "") {
+		alert('没有输入指定值！');
+	} else if (aDiv[Number(rmvNumber.value) + 1] == undefined || rmvNumber.value < 1) {
+		alert('没有指定的DIV可以删除！');
+	} else {
+		conDiv.removeChild(aDiv[Number(rmvNumber.value) + 1]);
+	};
+}
+//复制指定的DIV
+function copyDesDiv() {
+	var copyNumber = document.getElementById('copy_number');
+	if (copyNumber.value == "") {
+		alert('没有输入指定值！')
+	} else if (aDiv[Number(copyNumber.value) + 1] == undefined || copyNumber.value < 1) {
+		alert('没有指定的DIV可以复制！');
+	} else {
+		var divBox = aDiv[Number(copyNumber.value) + 1].cloneNode(false);
+		divBox.style.color = '#fff';
+		divBox.style.backgroundColor = '#393';
+		divBox.className = 'div_box';
+		divBox.setAttribute('title','这是指定复制的DIV，复制的是第' + (copyNumber.value) + '个DIV');
+		divBox.innerHTML = ('这是指定复制的DIV，复制的是第<strong>' + (copyNumber.value) + '</strong>个DIV');
+		conDiv.insertBefore(divBox,aDiv[Number(copyNumber.value) + 2]); //复制在指定DIV之后
+	};
+}
+//获取指定DIV的属性
+function getDesDiv() {
+	var getNumber = document.getElementById('getattr_number');
+	if (getNumber.value == "") {
+		alert('没有输入指定值！')
+	} else if (aDiv[Number(getNumber.value) + 1] == undefined || getNumber.value < 1) {
+		alert('没有指定的DIV可以获取！');
+	} else {
+		var divBox = aDiv[Number(getNumber.value) + 1];
+		alert(divBox.getAttribute('title'));
+	};
+}
+</script>
+</head>
+<body>
+<div class="btnbar">
+	<input type="button" id="add" value="插入DIV" onclick="addDiv();" />
+	<input type="button" id="add_designated" value="指定位置插入DIV" onclick="addDesDiv();" />
+	<input type="text" id="add_number" value="" size="1" />
+	<input type="button" id="remove_first" value="删除第一个DIV" onclick="rmvFirstDiv();" />
+	<input type="button" id="remove_last" value="删除最后一个DIV" onclick="rmvLastDiv();" />
+	<input type="button" id="remove_designated" value="删除指定的DIV" onclick="rmvDesDiv();" />
+	<input type="text" id="remove_number" value="" size="1" />
+	<input type="button" id="copy_designated" value="复制指定的DIV" onclick="copyDesDiv();" />
+	<input type="text" id="copy_number" value="" size="1" />
+	<input type="button" id="getattr_designated" value="获取指定DIV的属性" onclick="getDesDiv();" />
+	<input type="text" id="getattr_number" value="" size="1" />
+</div>
+<div id="container" class="clearfix"></div>
+<p>说明：指定的DIV按照水平序列来数，与DIV中的数字无关</p>
+</body>
+</html>

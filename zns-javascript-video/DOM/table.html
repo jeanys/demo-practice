@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>table-demo</title>
+<style>
+body,table,th,td,input { font-size:14px; text-align:left; }
+#hougong { width:400px; border:1px solid #000; }
+</style>
+
+<script>
+window.onload = function() {
+//隔行变色
+var oTab = document.getElementById('hougong');
+var aTr = oTab.tBodies[0].rows;
+function setRowsColor() {
+	for(var i=0; i<aTr.length; i++) {
+		if(i%2) {
+			aTr[i].style.backgroundColor = '#fff'; 
+		} else {
+			aTr[i].style.backgroundColor = '#ccc';
+		}
+	}
+}
+setRowsColor();
+
+var oName = document.getElementById('name');
+var oAge = document.getElementById('age');
+var oBtn = document.getElementById('smt');
+var nRows = oTab.tBodies[0].rows.length + 1
+//添加
+oBtn.onclick = function() {
+	var oTr = document.createElement('tr');
+	var oTd = document.createElement('td');
+	oTd.innerHTML = nRows++;
+	oTr.appendChild(oTd);
+	
+	var oTd = document.createElement('td');
+	oTd.innerHTML = oName.value;
+	oTr.appendChild(oTd);
+	
+	var oTd = document.createElement('td');
+	oTd.innerHTML = oAge.value;
+	oTr.appendChild(oTd);
+	
+	//删除
+	var oTd = document.createElement('td');
+	oTd.innerHTML = '<a href="javascript:;">删除</a>';
+	oTr.appendChild(oTd);
+	
+	oTr.getElementsByTagName('a')[0].onclick = function() {
+		oTr.parentNode.removeChild(oTr);
+		setRowsColor();
+	}
+	
+	oTab.tBodies[0].appendChild(oTr);
+	setRowsColor();
+}
+//查找
+var oSearch = document.getElementById('search');
+var oBtn2 = document.getElementById('sname');
+//var oldColor = [];
+oBtn2.onclick = function() {
+	setRowsColor();
+	for(var i=0; i<aTr.length; i++) {
+		var sTab = aTr[i].cells[1].innerHTML.toLowerCase(); //模糊大小写
+		var sTxt = oSearch.value.toLowerCase();
+		var aTxt = sTxt.split(' '); //多关键词
+		for(var j=0; j<aTxt.length; j++) { //每个关键词都搜索一次
+			if(aTxt[j] == '') { alert('请输入条件');return; }
+			if(sTab.search(aTxt[j])!=-1) { 
+				aTr[i].style.backgroundColor = 'yellow';
+			}
+		}
+	}
+}
+//筛选
+var oBtn3 = document.getElementById('fname');
+oBtn3.onclick = function() {
+	setRowsColor();
+	for(var i=0; i<aTr.length; i++) {
+		var sTab = aTr[i].cells[1].innerHTML.toLowerCase();
+		var sTxt = oSearch.value.toLowerCase();
+		var aTxt = sTxt.split(' ');
+		for(var j=0; j<aTxt.length; j++) {
+			//if(aTxt[j] == '') { alert('请输入条件');return; }
+			if(sTab.search(aTxt[j])==-1) { 
+				aTr[i].style.display = 'none';
+			} else {
+				aTr[i].style.display = 'table-row';
+			}
+		}
+	}
+}
+}
+</script>
+</head>
+
+<body>
+<p>
+<input id="name" type="text" value="欣欣备胎" />
+<input id="age" type="text" />
+<input id="smt" type="button" value="添加" />
+</p>
+<p>
+<input id="search" type="text" />
+<input id="sname" type="button" value="查找姓名" />
+<input id="fname" type="button" value="筛选姓名" />
+</p>
+<table id="hougong">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>姓名</th>
+			<th>年龄</th>
+            <th>操作</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td>1</td>
+			<td>天青、何雨静、小影</td>
+			<td>18</td>
+		</tr>
+		<tr>
+			<td>2</td>
+			<td>周杰伦、严静、觅觅</td>
+			<td>19</td>
+		</tr>
+		<tr>
+			<td>3</td>
+			<td>大小娘、陈欣、周xx</td>
+			<td>22</td>
+		</tr>
+		<tr>
+			<td>4</td>
+			<td>欣欣备胎1</td>
+			<td>25</td>
+		</tr>
+		<tr>
+			<td>5</td>
+			<td>欣欣备胎2</td>
+			<td>27</td>
+		</tr>
+	</tbody>
+</table>
+</body>
+</html>

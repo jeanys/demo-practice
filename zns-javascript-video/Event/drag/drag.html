@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>拖拽</title>
+<style type="text/css">
+#drag { width:200px; height:200px; border:1px solid #CCC; background:#F2F2F2; position:absolute; cursor:move; }
+</style>
+<script type="text/javascript">
+window.onload = function() {
+	var oDrag = document.getElementById('drag');
+	var disX = 0;
+	var disY = 0;
+	oDrag.onmousedown = function(ev) {
+		var oEvent = ev || event;
+		disX = oEvent.clientX - oDrag.offsetLeft;
+		disY = oEvent.clientY - oDrag.offsetTop;
+		document.onmousemove = function(ev) {
+			var oEvent = ev || event;
+			var l = oEvent.clientX - disX;
+			var t =  oEvent.clientY - disY;
+			if (l < 0) {
+				l = 0;
+			} else if ( l > document.documentElement.clientWidth - oDrag.offsetWidth) {
+				l = document.documentElement.clientWidth - oDrag.offsetWidth;
+			}
+			if (t < 0) {
+				t = 0;
+			} else if ( t > document.documentElement.clientHeight - oDrag.offsetHeight) {
+				t = document.documentElement.clientHeight - oDrag.offsetHeight;
+			}
+			oDrag.style.left = l + 'px';
+			oDrag.style.top = t + 'px';
+		}
+		document.onmouseup = function() {
+			document.onmousemove = null;
+			document.onmouseup = null;
+		}
+		return false; //FF bug
+	}
+}
+</script>
+</head>
+
+<body>
+<div id="drag"></div>
+</body>
+</html>

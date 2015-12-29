@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>通过className选择页面元素</title>
+<style>
+body { font:14px/1.2 "Courier New" 微软雅黑; }
+</style>
+<script>
+function getByClass(sClass, sTag, sParent) {
+    var aEle = null, oParent = null;
+    var aResult = [];
+    if(sClass == undefined || sClass == '') {return};
+    if(sParent == undefined || sParent == '') {
+        oParent = document;
+    } else {
+        oParent = document.getElementById(sParent);
+    }
+    if(sTag == undefined || sTag == '') {
+        aEle = oParent.getElementsByTagName('*');
+    } else {
+        aEle = oParent.getElementsByTagName(sTag);
+    }
+    for(var i=0; i<aEle.length; i++) {
+        if(aEle[i].className == sClass) {
+            aResult.push(aEle[i]);
+        }
+    }
+    return aResult;
+}
+//test
+window.onload = function() {
+	var oDivTest = document.getElementById('test');
+	var aInput = document.getElementsByTagName('input');
+	var aBox = null;
+	function setBorder() {
+		for(var i=0; i<oDivTest.getElementsByTagName('*').length; i++) {
+			oDivTest.getElementsByTagName('*')[i].style.border = 'none';
+		}
+		for(var i=0; i<aBox.length; i++) {
+			aBox[i].style.border = '1px solid #000';
+		}
+	}
+	aInput[0].onclick = function () {
+		aBox = getByClass('box'); //类名
+		setBorder();
+	}
+	aInput[1].onclick = function () {
+		aBox = getByClass('box','li'); //类名+标签
+		setBorder();
+	}
+	aInput[2].onclick = function () {
+		aBox = getByClass('box','li','content'); //类名+标签+ID
+		setBorder();
+	}
+	aInput[3].onclick = function () {
+		aBox = getByClass('box','','content'); //类名+ID
+		setBorder();
+	}
+}
+</script>
+</head>
+
+<body>
+<h1>通过className选择页面元素</h1>
+<div id="test">
+	<div id="content">
+		<p>有ID的DIV#content</p>
+		<ul class="box">ul.box
+			<li class="box">li.box</li>
+			<li class="box">li.box</li>
+			<li></li>
+			<li><a class="box" href="#">a.box</a></li>
+			<li></li>
+			<li class="box">li.box</li>
+			<li></li>
+		</ul>
+	</div>
+	<div>
+		<p>无ID的DIV</p>
+		<ul class="box">ul.box
+			<li class="box">li.box</li>
+			<li class="box">li.box</li>
+			<li></li>
+			<li><a class="box" href="#">a.box</a></li>
+			<li></li>
+			<li class="box">li.box</li>
+			<li></li>
+		</ul>
+	</div>
+</div>
+<input type="button" value="类名" title="页面中所有的.box" />
+<input type="button" value="类名+标签" title="页面中所有的li.box" />
+<input type="button" value="类名+标签+ID" title="页面中所有的#content li.box" />
+<input type="button" value="类名+ID" title="页面中所有的#content .box" />
+</body>
+</html>

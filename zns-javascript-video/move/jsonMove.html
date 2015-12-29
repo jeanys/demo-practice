@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>同步运动</title>
+<style>
+div { width:50px; height:50px; background:#000; opacity:0.3; filter:alpha(opacity:30) }
+</style>
+<script>
+window.onload = function() {
+	var oDiv = document.getElementsByTagName('div')[0];
+	oDiv.onmouseover = function() {
+		startMove(oDiv, {width:500, height:500, opacity:100});
+	}
+	oDiv.onmouseout = function() {
+		startMove(oDiv, {width:50, height:50, opacity:30});
+	}
+}
+//完美运动框架
+function getStyle(obj, attr) {
+	if(obj.currentStyle) {
+		return obj.currentStyle[attr];
+	} else {
+		return getComputedStyle(obj,false)[attr];
+	}
+}
+//JSON: startMove(obj, {attr1:a, attr2:b, ...}, fnEnd)
+function startMove(obj, json, fnEnd) {
+	clearInterval(obj.timer);
+	obj.timer = setInterval(function() {
+		var attrsTarget = true; //假设：所有值都已经到了
+		for(var attr in json) { //遍历json中所有attr
+			if(attr == 'opacity') {
+				var cur = Math.round(parseFloat(getStyle(obj,attr)) * 100);
+			} else {
+				var cur = parseInt(getStyle(obj,attr));
+			}
+			var speed = (json[attr] - cur) / 8;
+			speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed) ;
+			if(json[attr] != cur) attrsTarget = false; //如果有属性值没到目标，标识假
+			if(attr == 'opacity') {
+				obj.style.filter = 'alpha(opacity:' + (cur+speed) + ')';
+				obj.style[attr] = (cur + speed) / 100;
+			} else {
+				obj.style[attr] = cur + speed + 'px';
+			}
+		}
+		if(attrsTarget) { //全部属性到达目标再清空定时器
+			clearInterval(obj.timer);
+			if(fnEnd)fnEnd();
+		}
+	}, 30)
+}
+</script>
+</head>
+
+<body>
+<div></div>
+</body>
+</html>

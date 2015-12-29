@@ -1,0 +1,78 @@
+﻿<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>拖拽DIV，兼容IE\FF\CH\OP\SA</title>
+<style type="text/css">
+#div1{width:100px;height:100px;position:absolute;background:#f00;}
+.box{border:1px dashed #000;position:absolute;z-index:0;}
+</style>
+<script>
+window.onload = function(){
+	
+	var oDiv = document.getElementById("div1");   //获取DIV
+	
+	oDiv.onmousedown = function(ev){
+		
+		var oEvent = ev || event;     //IE 或 FF CH SA OP
+		var oBox = document.createElement("div");  //创建一个DIV
+		oBox.className = "box";    //给创建的DIV添加名为box的class
+		document.body.appendChild(oBox);   //添加到body
+		oBox.style.width = this.offsetWidth - 2 + "px";    // 设置新创建的DIV的宽度
+		oBox.style.height = this.offsetHeight - 2 + "px";  // 设置新创建的DIV的高度
+		oBox.style.left = this.offsetLeft + "px";   // 设置新创建的DIV的左边移
+		oBox.style.top = this.offsetTop + "px";     // 设置新创建的DIV的上边移
+		
+		mouX = oEvent.clientX - oDiv.offsetLeft;
+		mouY = oEvent.clientY - oDiv.offsetTop;
+		
+		if(oDiv.setCapture){
+			this.onmousemove = mouseMove;
+			this.onmouseup = mouseUp;
+			this.setCapture();  //当前的DIV捕获事件，只有在IE中有效
+		}else{
+			document.onmousemove = mouseMove;
+			document.onmouseup = mouseUp;
+		};
+		function mouseMove(ev){
+			var oEvent = ev || event;
+			var l = oEvent.clientX - mouX;
+			var t = oEvent.clientY - mouY;
+			if(l < 0){
+				l = 0;
+			}else if( l > document.documentElement.clientWidth - oDiv.offsetWidth){
+				l = document.documentElement.clientWidth - oDiv.offsetWidth;
+			}
+			
+			if(t < 0){
+				t = 0;
+			}else if(t > document.documentElement.clientHeight - oDiv.offsetHeight){
+				t = document.documentElement.clientHeight - oDiv.offsetHeight;
+			}
+			
+			
+			oBox.style.left = l + "px";
+			oBox.style.top = t + "px";
+			
+		}
+		function mouseUp(){
+			oDiv.style.left = oBox.style.left;
+			oDiv.style.top = oBox.style.top;
+			document.body.removeChild(oBox);
+			this.onmousemove = null;
+			this.onmouseup = null;
+			if(this.releaseCapture){
+				this.releaseCapture();
+			}
+		}
+		return false;
+	};
+	
+};
+</script>
+</head>
+
+<body>
+<div id="div1">drag</div>
+</body>
+</html>

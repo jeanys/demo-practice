@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>runcode-demo</title>
+<style>
+body,textarea,input { margin:0; font:12px/1.5 "Courier New", \5FAE\8F6F\96C5\9ED1; }
+textarea { display:block; padding:5px; }
+input { width:80px; height:30px; background:#36C; border:1px solid #06C; color:#FFF; cursor:pointer; margin:10px 10px 0 0; }
+#code { margin:30px; }
+</style>
+<script>
+window.onload = function() {
+	var oCode = document.getElementById('code');
+	var oText = oCode.getElementsByTagName('textarea')[0];
+	var oRun = oCode.getElementsByTagName('input')[0];
+	oRun.onclick = function() {
+		runCode(oText.value);
+	}
+}
+function runCode(html) {
+	var oWin = window.open('about:blank', '_blank'); 
+	oWin.opener = null; //防止代码对页面修改
+	oWin.document.write(html); //写入HTML
+	oWin.document.close(); //关闭文档输入流
+}
+</script>
+</head>
+
+<body>
+<div id="code">
+	<textarea cols="50" rows="10"><script>
+alert('demo');
+</script></textarea>
+	<input type="button" value="运行代码" />
+</div>
+</body>
+</html>

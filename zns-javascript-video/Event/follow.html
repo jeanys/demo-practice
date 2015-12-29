@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>鼠标跟随</title>
+<style>
+body { cursor:none; }
+div { width:16px; height:16px; background:url(follow.gif); position:absolute; }
+</style>
+<script>
+window.onload = function() {
+	var aDiv = document.getElementsByTagName('div');
+	for(var i=1; i<30; i++) {
+		aDiv[0].parentNode.appendChild(document.createElement('div'));
+	}
+}
+document.onmousemove = function(ev) {
+	var oEvent = ev || event;
+	var aDiv = document.getElementsByTagName('div');
+		for(var i=aDiv.length-1; i>0; i--) {
+			aDiv[i].style.left = aDiv[i-1].offsetLeft + 'px';
+			aDiv[i].style.top = aDiv[i-1].offsetTop + 'px';
+		}
+		aDiv[0].style.left = oEvent.clientX + 'px';
+		aDiv[0].style.top = oEvent.clientY + 'px';
+}
+</script>
+</head>
+
+<body>
+<div></div>
+</body>
+</html>

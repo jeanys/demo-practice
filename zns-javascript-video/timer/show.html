@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无缝滚动</title>
+<style>
+body,ul,li { margin:0; padding:0; }
+#slideshow { width:712px; height:108px; position:relative; margin:0 88px; overflow:hidden; }
+#slideshow ul { position:absolute; left:0; top:0; }
+#slideshow li { list-style:none; float:left; }
+
+.container { position:relative; margin:100px auto; width:888px; }
+#slidebtn { position:absolute; left:0; top:0; width:888px; height:68px; margin:20px 0; }
+#slidebtn a { display:block; width:68px; height:68px; background:url(images/btn.jpg) no-repeat; }
+#slidebtn a.leftbtn { background-position:right top; float:left; }
+#slidebtn a.rightbtn { background-position:left top; float:right; }
+#slidebtn a.leftbtn:hover { background-position:right bottom; }
+#slidebtn a.rightbtn:hover { background-position:left bottom; }
+</style>
+<script>
+window.onload = function() {
+	var oDivShow = document.getElementById('slideshow');
+	var aUlShow = oDivShow.getElementsByTagName('ul');
+	var aLiShow = aUlShow[0].getElementsByTagName('li');
+	var speed = -2;
+	aUlShow[0].innerHTML += aUlShow[0].innerHTML;
+	aUlShow[0].style.width = aLiShow[0].offsetWidth * aLiShow.length + 'px';
+	function slide(){
+		aUlShow[0].style.left = aUlShow[0].offsetLeft + speed + 'px';
+		if(aUlShow[0].offsetLeft < -aUlShow[0].offsetWidth/2){
+			aUlShow[0].style.left = '0';
+		}
+		if(aUlShow[0].offsetLeft > 0){
+			aUlShow[0].style.left = -aUlShow[0].offsetWidth/2 + 'px';
+		}
+	}
+	var timer = setInterval(slide,30); //精细度
+	oDivShow.onmouseover = function() {
+		clearInterval(timer);
+	}
+	oDivShow.onmouseout = function() {
+		timer = setInterval(slide,30);
+	}
+	var oDivBtn = document.getElementById('slidebtn');
+	var aABtn = oDivBtn.getElementsByTagName('a');
+	aABtn[0].onmouseover = function() {
+		speed = -2;
+	}
+	aABtn[1].onmouseover = function() {
+		speed = 2;
+	}
+}
+</script>
+</head>
+
+<body>
+<div class="container">
+	<div id="slideshow">
+		<ul>
+			<li><img src="images/1.jpg" /></li>
+			<li><img src="images/2.jpg" /></li>
+			<li><img src="images/3.jpg" /></li>
+			<li><img src="images/4.jpg" /></li>
+		</ul>
+	</div>
+	<div id="slidebtn">
+		<a class="leftbtn" href="javascript:"></a>
+		<a class="rightbtn" href="javascript:"></a>
+	</div>
+</div>
+</body>
+</html>

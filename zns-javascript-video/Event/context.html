@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>context-demo</title>
+<style type="text/css">
+body,ul,li { margin:0; padding:0; }
+body { font:12px/30px 'Arial'; height:2000px; }
+li { list-style:none; }
+a { color:#666; text-decoration:none; display:block; }
+a:hover { background:#F2F2F2; }
+#contextMenu { width:120px; height:180px; border:1px solid #CCC; background:#FFF; color:#666; text-align:center; padding:10px; position:absolute; display:none; }
+</style>
+<script type="text/javascript">
+window.onload = function() {
+	var oMenu = document.getElementById('contextMenu');
+	document.oncontextmenu = function(ev) {
+		var oEvent = ev || event;
+		var pos = getPos(oEvent);
+		oMenu.style.left = pos.x + 'px';
+		oMenu.style.top = pos.y + 'px';
+		oMenu.style.display = 'block';
+		return false;
+	}
+	document.onclick = function() {
+		oMenu.style.display = 'none';
+	}
+}
+function getPos(ev) {
+    var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+    var scrollLeft = document.documentElement.scrollLeft || document.body.scrollLeft;
+    return {x: ev.clientX+scrollLeft, y: ev.clientY+scrollTop}; //返回一个JSON
+}
+</script>
+</head>
+
+<body>
+<div id="contextMenu">
+	<ul>
+		<li><a href="javascript:;">Menu1: some text...</a></li>
+		<li><a href="javascript:;">Menu2</a></li>
+		<li><a href="javascript:;">Menu3</a></li>
+		<li><a href="javascript:;">Menu4</a></li>
+		<li><a href="javascript:;">Menu5</a></li>
+		<li><a href="javascript:;">Menu6</a></li>
+	</ul>
+</div>
+</body>
+</html>

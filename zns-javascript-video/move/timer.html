@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>多物体任意值运动框架</title>
+<style>
+body { margin:20px; padding:0; font:20px/200px "Courier New"; color:#FFF; }
+div { width:200px; height:200px; margin:0 20px 20px 0; float:left; background:#000; border:10px solid #0CF; text-align:center; }
+#setAlpha { filter:alpha(opacity:30); opacity:0.3; }
+</style>
+<script>
+window.onload = function() {
+	var aDiv = document.getElementsByTagName('div');
+	for(var i=0;i<aDiv.length;i++) {
+		aDiv[i].timer = null;
+	}
+	
+	var oDivWid = document.getElementById('setWidth');
+	var oDivHei = document.getElementById('setHeight');
+	var oDivFont = document.getElementById('setFont');
+	var oDivAlp = document.getElementById('setAlpha');
+	
+	oDivWid.onmouseover = function() {startMove(500,this,'width');}
+	oDivWid.onmouseout = function() {startMove(200,this,'width');}
+	
+	oDivHei.onmouseover = function() {startMove(500,this,'height');}
+	oDivHei.onmouseout = function() {startMove(200,this,'height');}
+	
+	oDivFont.onmouseover = function() {startMove(50,this,'fontSize');}
+	oDivFont.onmouseout = function() {startMove(20,this,'fontSize');}
+	
+	oDivAlp.onmouseover = function() {startMove(100,this,'opacity');}
+	oDivAlp.onmouseout = function() {startMove(30,this,'opacity');}
+}
+function getStyle(obj, attr) { //取元素非行间样式
+	if(obj.currentStyle) {
+		return obj.currentStyle[attr];
+	} else {
+		return getComputedStyle(obj,false)[attr];
+	}
+}
+function startMove(iTarget, obj, attr) { //将属性用参数传递
+	clearInterval(obj.timer);
+	obj.timer = setInterval(function() {
+		if(attr == 'opacity') {
+			//透明度值取浮点数，计算浮点数的误差四舍五入
+			var cur = Math.round(parseFloat(getStyle(obj,attr)) * 100);
+		} else {
+			var cur = parseInt(getStyle(obj,attr)); //offsetBUG
+		}
+		var speed = (iTarget - cur) / 8;
+		speed = speed > 0 ? Math.ceil(speed) : Math.floor(speed) ;
+		if(iTarget == cur) {
+			clearInterval(obj.timer);
+		} else {
+			if(attr == 'opacity') {
+				obj.style.filter = 'alpha(opacity:' + (cur+speed) + ')';
+				obj.style[attr] = (cur + speed) / 100;
+			} else {
+				obj.style[attr] = cur + speed + 'px';
+			}
+		}
+	}, 30)
+}
+</script>
+</head>
+<body>
+<div id="setWidth">setWidth</div>
+<div id="setHeight">setHeight</div>
+<div id="setFont">setFont</div>
+<div id="setAlpha">setAlpha</div>
+</body>
+</html>

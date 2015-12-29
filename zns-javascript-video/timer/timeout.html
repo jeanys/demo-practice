@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>延时提示框</title>
+<style>
+#avatar { width:100px; height: 100px; background:#09C; float:left; margin-right:20px; }
+#content { width:300px; height: 200px; background:#069; float:left; display:none; }
+</style>
+<script>
+window.onload = function() {
+	var oDivAvt = document.getElementById('avatar');
+	var oDivCon = document.getElementById('content');
+	var timer = null;
+	oDivCon.onmouseover = oDivAvt.onmouseover = function() {
+		clearTimeout(timer);
+		oDivCon.style.display = 'block';	
+	}
+	oDivCon.onmouseout = oDivAvt.onmouseout = function() {
+		timer = setTimeout( function() {
+			oDivCon.style.display = 'none';
+		} , 500)
+	}
+/*	oDivAvt.onmouseover = function() {
+		clearTimeout(timer);
+		oDivCon.style.display = 'block';	
+	}
+	oDivAvt.onmouseout = function() {
+		timer = setTimeout( function() {
+			oDivCon.style.display = 'none';
+		} , 500)
+	}
+	oDivCon.onmouseover = function() {
+		clearTimeout(timer);
+	}
+	oDivCon.onmouseout = function() {
+		timer = setTimeout( function() {
+			oDivCon.style.display = 'none';
+		} , 500)
+	}*/
+}
+</script>
+</head>
+
+<body>
+<div id="avatar"></div>
+<div id="content"></div>
+</body>
+</html>

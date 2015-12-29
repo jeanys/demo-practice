@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>单联浮动广告</title>
+<style>
+body { margin:0; padding:0; height:2000px; }
+#ad { width:80px; height:200px; background:#f0f0f0; border:1px solid #ccc; position:absolute; right:0; }
+#ad span { display:block; width:18px; height:18px; background:#ccc; float:right; cursor:pointer; }
+</style>
+<script>
+window.onload = function() {
+	var oDivAd = document.getElementById('ad');
+	var aSpan = oDivAd.getElementsByTagName('span');
+	var timer = null;
+	function scrollad(iTarget) {
+		clearInterval(timer);
+		timer = setInterval(function() {
+			var speed = (iTarget - oDivAd.offsetTop) / 5; //缓冲速度 = 距离 / 运动系数，系数越大缓冲越慢
+			speed = speed>0 ? Math.ceil(speed) : Math.floor(speed); //速度取整
+			oDivAd.style.top = oDivAd.offsetTop + speed + 'px';
+		}, 30)
+	}
+	window.onscroll = function() {
+		var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+		//oDivAd.style.top = document.documentElement.clientHeight - oDivAd.offsetHeight + scrollTop + 'px';
+		scrollad(parseInt((document.documentElement.clientHeight - oDivAd.offsetHeight)/2 + scrollTop)); //居中取整
+	}
+	aSpan[0].onclick = function() {
+		oDivAd.style.display = 'none';
+	}
+}
+</script>
+</head>
+
+<body>
+<div id="ad">
+    <span>&nbsp;</span>
+</div>
+</body>
+</html>
